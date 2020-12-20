@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="./js/coder_app.js"></script>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="./rtwreport_utils.js"></script>
+<script type="text/javascript" src="./rtwannotate.js"></script>
+<link rel="stylesheet" type="text/css" href="./css/coder_app.css"/>
+</head>
+<body onload="srcFileOnload();">
+<pre id="code">
+<table class="code" id="codeTbl">
+<tr name="1" id="1">
+<td><a id="l1" class='ln'>1</a></td><td><span class="pp">#include "MW_target_hardware_resources.h"</span></td></tr>
+<tr name="2" id="2">
+<td><a id="l2" class='ln'>2</a></td><td><span class="pp">#include &lt;math.h&gt;</span></td></tr>
+<tr name="3" id="3">
+<td><a id="l3" class='ln'>3</a></td><td><span class="pp">#include &lt;float.h&gt;</span></td></tr>
+<tr name="4" id="4">
+<td><a id="l4" class='ln'>4</a></td><td></td></tr>
+<tr name="5" id="5">
+<td><a id="l5" class='ln'>5</a></td><td><span class="pp">#ifdef</span> <a id="5c8" class="tk">MW_FAST_RTS_INCLUDED</a></td></tr>
+<tr name="6" id="6">
+<td><a id="l6" class='ln'>6</a></td><td><span class="pp">#if</span> <a id="6c5" class="tk">DBL_MANT_DIG</a> <a id="6c18" class="tk">==</a> <a id="6c21" class="tk">FLT_MANT_DIG</a></td></tr>
+<tr name="7" id="7">
+<td><a id="l7" class='ln'>7</a></td><td><span class="kw">float</span> <a id="7c7" class="tk">cosf</a>(<span class="kw">float</span> <a id="7c18" class="tk">x</a>) <span class="br">{</span> <span class="kw">return</span> <a id="7c30" class="tk">cos</a>(<a id="7c34" class="tk">x</a>); <span class="br">}</span></td></tr>
+<tr name="8" id="8">
+<td><a id="l8" class='ln'>8</a></td><td><span class="kw">float</span> <a id="8c7" class="tk">sinf</a>(<span class="kw">float</span> <a id="8c18" class="tk">x</a>) <span class="br">{</span> <span class="kw">return</span> <a id="8c30" class="tk">sin</a>(<a id="8c34" class="tk">x</a>); <span class="br">}</span></td></tr>
+<tr name="9" id="9">
+<td><a id="l9" class='ln'>9</a></td><td><span class="kw">float</span> <a id="9c7" class="tk">sqrtf</a>(<span class="kw">float</span> <a id="9c19" class="tk">x</a>) <span class="br">{</span> <span class="kw">return</span> <a id="9c31" class="tk">sqrt</a>(<a id="9c36" class="tk">x</a>); <span class="br">}</span></td></tr>
+<tr name="10" id="10">
+<td><a id="l10" class='ln'>10</a></td><td><span class="kw">float</span> <a id="10c7" class="tk">atanf</a>(<span class="kw">float</span> <a id="10c19" class="tk">x</a>) <span class="br">{</span> <span class="kw">return</span> <a id="10c31" class="tk">atan</a>(<a id="10c36" class="tk">x</a>); <span class="br">}</span></td></tr>
+<tr name="11" id="11">
+<td><a id="l11" class='ln'>11</a></td><td><span class="kw">float</span> <a id="11c7" class="tk">atan2f</a>(<span class="kw">float</span> <a id="11c20" class="tk">y</a>, <span class="kw">float</span> <a id="11c29" class="tk">x</a>) <span class="br">{</span> <span class="kw">return</span> <a id="11c41" class="tk">atan2</a>(<a id="11c47" class="tk">y</a>, <a id="11c50" class="tk">x</a>); <span class="br">}</span></td></tr>
+<tr name="12" id="12">
+<td><a id="l12" class='ln'>12</a></td><td><span class="pp">#endif</span></td></tr>
+<tr name="13" id="13">
+<td><a id="l13" class='ln'>13</a></td><td><span class="pp">#endif</span></td></tr>
+<tr name="14" id="14">
+<td><a id="l14" class='ln'>14</a></td><td></td></tr>
+<tr name="15" id="15">
+<td><a id="l15" class='ln'>15</a></td><td><span class="kw">extern</span> <a id="15c8" class="tk">Uint16</a> <a id="15c15" class="tk">RamfuncsLoadSize</a>;</td></tr>
+<tr name="16" id="16">
+<td><a id="l16" class='ln'>16</a></td><td></td></tr>
+<tr name="17" id="17">
+<td><a id="l17" class='ln'>17</a></td><td><span class="kw">void</span> <a id="17c6" class="tk">globalInterruptEnable</a>(<span class="kw">void</span>)</td></tr>
+<tr name="18" id="18">
+<td><a id="l18" class='ln'>18</a></td><td><span class="br">{</span></td></tr>
+<tr name="19" id="19">
+<td><a id="l19" class='ln'>19</a></td><td>	<a id="19c2" class="tk">EINT</a>; <span class="ct">/* Enable Global Interrupt INTM*/</span></td></tr>
+<tr name="20" id="20">
+<td><a id="l20" class='ln'>20</a></td><td>	<a id="20c2" class="tk">ERTM</a>; <span class="ct">/* Enable Global realtime interrupt DBGM */</span></td></tr>
+<tr name="21" id="21">
+<td><a id="l21" class='ln'>21</a></td><td><span class="br">}</span></td></tr>
+<tr name="22" id="22">
+<td><a id="l22" class='ln'>22</a></td><td></td></tr>
+<tr name="23" id="23">
+<td><a id="l23" class='ln'>23</a></td><td><span class="kw">void</span> <a id="23c6" class="tk">globalInterruptDisable</a>(<span class="kw">void</span>)</td></tr>
+<tr name="24" id="24">
+<td><a id="l24" class='ln'>24</a></td><td><span class="br">{</span></td></tr>
+<tr name="25" id="25">
+<td><a id="l25" class='ln'>25</a></td><td>	<a id="25c2" class="tk">DINT</a>; <span class="ct">/* Disable Global Interrupt INTM*/</span>   </td></tr>
+<tr name="26" id="26">
+<td><a id="l26" class='ln'>26</a></td><td><span class="br">}</span></td></tr>
+<tr name="27" id="27">
+<td><a id="l27" class='ln'>27</a></td><td></td></tr>
+<tr name="28" id="28">
+<td><a id="l28" class='ln'>28</a></td><td><span class="kw">void</span> <a id="28c6" class="tk">c2000_flash_init</a>(<span class="kw">void</span>)</td></tr>
+<tr name="29" id="29">
+<td><a id="l29" class='ln'>29</a></td><td><span class="br">{</span></td></tr>
+<tr name="30" id="30">
+<td><a id="l30" class='ln'>30</a></td><td>  <span class="pp">#if</span> <a id="30c7" class="tk">MW_RUNTIME_FLASHLOAD</a></td></tr>
+<tr name="31" id="31">
+<td><a id="l31" class='ln'>31</a></td><td>  <span class="ct">// Copy InitFlash function code and Flash setup code to RAM</span></td></tr>
+<tr name="32" id="32">
+<td><a id="l32" class='ln'>32</a></td><td>  <a id="32c3" class="tk">memcpy</a>(<a id="32c10" class="tk">&amp;</a><a id="32c11" class="tk">RamfuncsRunStart</a>,<a id="32c28" class="tk">&amp;</a><a id="32c29" class="tk">RamfuncsLoadStart</a>, (<a id="32c49" class="tk">Uint32</a>)(<a id="32c57" class="tk">&amp;</a><a id="32c58" class="tk">RamfuncsLoadEnd</a><a id="32c73" class="tk">-</a><a id="32c74" class="tk">&amp;</a><a id="32c75" class="tk">RamfuncsLoadStart</a>));</td></tr>
+<tr name="33" id="33">
+<td><a id="l33" class='ln'>33</a></td><td></td></tr>
+<tr name="34" id="34">
+<td><a id="l34" class='ln'>34</a></td><td>  <span class="ct">// Call Flash Initialization to setup flash waitstates</span></td></tr>
+<tr name="35" id="35">
+<td><a id="l35" class='ln'>35</a></td><td>  <span class="ct">// This function must reside in RAM</span></td></tr>
+<tr name="36" id="36">
+<td><a id="l36" class='ln'>36</a></td><td>  <a id="36c3" class="tk">InitFlash</a>();</td></tr>
+<tr name="37" id="37">
+<td><a id="l37" class='ln'>37</a></td><td>  <span class="pp">#endif</span></td></tr>
+<tr name="38" id="38">
+<td><a id="l38" class='ln'>38</a></td><td><span class="br">}</span></td></tr>
+<tr name="39" id="39">
+<td><a id="l39" class='ln'>39</a></td><td></td></tr>
+</table>
+</pre>
+</body>
+</html>

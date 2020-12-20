@@ -1,0 +1,1855 @@
+/******************************************************************************
+ *
+ *  ASAP2 file:     Fuel_Pump_V3_1_20201113_20KHz.a2l
+ *
+ * Academic License - for use in teaching, academic research, and meeting
+ * course requirements at degree granting institutions only.  Not for
+ * government, commercial, or other organizational use. 
+ * 
+ * Code generation for model "Fuel_Pump_V3_1_20201113_20KHz".
+ *
+ * Model version              : 1.40
+ * Simulink Coder version : 9.2 (R2019b) 18-Jul-2019
+ * C source code generated on : Tue Nov 17 11:10:34 2020
+ * 
+ * Target selection: ert.tlc
+ * Embedded hardware selection: Texas Instruments->C2000
+ * Code generation objective: Execution efficiency
+ * Validation result: Not run
+ *
+ * (add additional file header information here)
+ *
+ ******************************************************************************/
+
+ASAP2_VERSION  1 31   /* Version 1.31 */
+
+/begin PROJECT ProjectName "Project Comment Goes Here"
+  
+  /begin HEADER "Header Comments go here"
+    
+  /end HEADER
+  
+  
+  /begin MODULE ModuleName  "Module Comment Goes Here"
+    
+    /begin MOD_PAR "MOD PAR Comment Goes Here"
+      
+    /end MOD_PAR
+    
+    /begin MOD_COMMON  "Mod Common Comment Here" 
+      BYTE_ORDER     MSB_LAST
+    /end MOD_COMMON
+    
+    /begin RECORD_LAYOUT Scalar_BOOLEAN
+      FNC_VALUES  1 UBYTE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Scalar_UBYTE
+      FNC_VALUES  1 UBYTE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Scalar_BYTE
+      FNC_VALUES  1 SBYTE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Scalar_UWORD
+      FNC_VALUES  1 UWORD COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Scalar_SWORD
+      FNC_VALUES 1 SWORD COLUMN_DIR DIRECT
+    /end RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Scalar_ULONG
+      FNC_VALUES  1 ULONG COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Scalar_LONG
+      FNC_VALUES  1 SLONG COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Scalar_FLOAT32_IEEE
+      FNC_VALUES  1 FLOAT32_IEEE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Scalar_FLOAT64_IEEE
+      FNC_VALUES  1 FLOAT64_IEEE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    
+    /begin RECORD_LAYOUT Lookup1D_BOOLEAN
+      FNC_VALUES  1 UBYTE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_X_BOOLEAN
+      AXIS_PTS_X  1 UBYTE INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_BYTE
+      FNC_VALUES  1 SBYTE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_X_BYTE
+      AXIS_PTS_X  1 SBYTE INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_UBYTE
+      FNC_VALUES  1 UBYTE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_X_UBYTE
+      AXIS_PTS_X  1 UBYTE INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_UWORD
+      FNC_VALUES  1 UWORD COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_X_UWORD
+      AXIS_PTS_X  1 UWORD INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_WORD
+      FNC_VALUES  1 SWORD COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_X_WORD
+      AXIS_PTS_X  1 SWORD INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_ULONG
+      FNC_VALUES  1 ULONG COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_X_ULONG
+      AXIS_PTS_X  1 ULONG INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_SLONG
+      FNC_VALUES  1 SLONG COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_X_LONG
+      AXIS_PTS_X  1 SLONG INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_FLOAT32_IEEE
+      FNC_VALUES  1 FLOAT32_IEEE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_X_FLOAT32_IEEE
+      AXIS_PTS_X  1 FLOAT32_IEEE INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_FLOAT64_IEEE
+      FNC_VALUES  1 FLOAT64_IEEE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup1D_X_FLOAT64_IEEE
+      AXIS_PTS_X  1 FLOAT64_IEEE INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_BOOLEAN
+      FNC_VALUES  1 UBYTE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_X_BOOLEAN
+      AXIS_PTS_X  1 UBYTE INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT    
+    
+    /begin RECORD_LAYOUT Lookup2D_UBYTE
+      FNC_VALUES  1 UBYTE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_X_UBYTE
+      AXIS_PTS_X  1 UBYTE INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_BYTE
+      FNC_VALUES  1 SBYTE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_X_BYTE
+      AXIS_PTS_X  1 SBYTE INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_UWORD
+      FNC_VALUES  1 UWORD COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_X_UWORD
+      AXIS_PTS_X  1 UWORD INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_WORD
+      FNC_VALUES  1 SWORD COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_X_WORD
+      AXIS_PTS_X  1 SWORD INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_ULONG
+      FNC_VALUES  1 ULONG COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_X_ULONG
+      AXIS_PTS_X  1 ULONG INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_LONG
+      FNC_VALUES  1 SLONG COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_X_LONG
+      AXIS_PTS_X  1 SLONG INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_FLOAT32_IEEE
+      FNC_VALUES  1 FLOAT32_IEEE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_X_FLOAT32_IEEE
+      AXIS_PTS_X 1 FLOAT32_IEEE INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_FLOAT64_IEEE
+      FNC_VALUES  1  FLOAT64_IEEE COLUMN_DIR DIRECT
+    /end   RECORD_LAYOUT
+    
+    /begin RECORD_LAYOUT Lookup2D_X_FLOAT64_IEEE
+      AXIS_PTS_X 1 FLOAT64_IEEE INDEX_INCR DIRECT
+    /end   RECORD_LAYOUT
+    
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Data_Buffer_ThetaSMO
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      /* Array Size             */
+      ARRAY_SIZE                        1000
+      ECU_ADDRESS                       0x0000e800
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Buffer_Out_ThetaSMO
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f028
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Buffer_Out_ThetaAD2S
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f02a
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Buffer_Out_IqDem
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f02c
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Buffer_Out_Iq
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f02e
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Buffer_Out_Id
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f030
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Buffer_Out_IdDem
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f032
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      n_R
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f034
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      n_Q
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f036
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Ready_1210
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f038
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Current_W1
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f03a
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Current_U1
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f03c
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Current_V1
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f03e
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Angle
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f040
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_A
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f042
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_K1
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f044
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_K2
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f046
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      nDem_PI
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f048
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Uq_VVF
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f04a
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Ud_VVF
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f04c
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      LWFf
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f04e
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      n_Filter
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f050
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Us
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f052
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      I_alpha
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f054
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      I_beta
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f056
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_KP
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f058
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_KI
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f05a
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      V_alpha
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f05c
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      V_beta
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f05e
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      EMF_alpha
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f060
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      EMF_beta
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f062
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_uin
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f064
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      LWFDem
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f066
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      nDem
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f068
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      n
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f06a
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SetpointValue
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f06c
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      AD_Angle
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f06e
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      n_Step
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f070
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_Theta
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f072
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_n
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f074
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      TEMP_MCU1
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f076
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      TEMP_MCU2
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f078
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      TEMP_MOT1
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f07a
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      TEMP_MOT2
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f07c
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      en
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f07e
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      uin
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f080
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      un_PI
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f082
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      PK_Kpn
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f084
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_Slide
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f086
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_ComP
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f088
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      n_1210
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f08a
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      PK_Kin
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f08c
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_Filter
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f08e
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Data_Buffer_ThetaAD2S
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      /* Array Size             */
+      ARRAY_SIZE                        1000
+      ECU_ADDRESS                       0x0000e000
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      IqDem
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f090
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Id
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f092
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Data_Buffer_IqDem
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      /* Array Size             */
+      ARRAY_SIZE                        1000
+      ECU_ADDRESS                       0x0000d800
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      uiId
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f094
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Ud
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f096
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      IdDem
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f098
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Iq
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f09a
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Data_Buffer_Iq
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      /* Array Size             */
+      ARRAY_SIZE                        1000
+      ECU_ADDRESS                       0x0000d000
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      uiIq
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f09c
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      PK_KpIq
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f09e
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Uq
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f0a0
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      PK_KpId
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f0a2
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      PK_KiId
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f0a4
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      PK_KiIq
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f0a6
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Data_Buffer_IdDem
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      /* Array Size             */
+      ARRAY_SIZE                        1000
+      ECU_ADDRESS                       0x0000c800
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Data_Buffer_Id
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      /* Array Size             */
+      ARRAY_SIZE                        1000
+      ECU_ADDRESS                       0x0000c000
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      eLWFf
+      /* Long identifier        */      ""
+      /* Data type              */      FLOAT32_IEEE
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -3.4E+38
+      /* Upper limit            */      3.4E+38
+      ECU_ADDRESS                       0x0000f0a8
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      CPU_Timer
+      /* Long identifier        */      ""
+      /* Data type              */      ULONG
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint32
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      4294967295
+      ECU_ADDRESS                       0x0000f0aa
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      VVF_Frq
+      /* Long identifier        */      ""
+      /* Data type              */      SLONG
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_sfix32_En29
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -4.0
+      /* Upper limit            */      3.9999999981373549
+      ECU_ADDRESS                       0x0000f0ac
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      IF_Frq
+      /* Long identifier        */      ""
+      /* Data type              */      SLONG
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_sfix32_En29
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      -4.0
+      /* Upper limit            */      3.9999999981373549
+      ECU_ADDRESS                       0x0000f0ae
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      ControlMode
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f000
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Mid_Position
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f001
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Buffer_Flag
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f002
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_OvrLim_WindingUT
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f003
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_OvrLim_WindingVT
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f004
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_OvrLim_TempMOST
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f005
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_OvrLim_TempUT
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f006
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_OvrLim_TempVT
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f007
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      MCU_ST
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f008
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      MCU_IN
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f009
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Offset_W1
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f00a
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      GF_MODE
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f00b
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SCI_Break_Error
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f00c
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      TX_DATA
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f00d
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Stop
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f00e
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      U1
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f00f
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      RMS_Count
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f010
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      RX_DATA
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f011
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      V1
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f012
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Protect_Flag
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f013
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SCI_Error
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f014
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      NC1
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f015
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      NC2
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f016
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_LWFf
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f017
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_Resolver
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f018
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_MOST_T
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f019
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_WindingUT_Sensor
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f01a
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_WindingVT_Sensor
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f01b
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_Winding_I
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f01c
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_OvrLim_I
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f01d
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      bFlt_OvrLim_MOST
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f01e
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      W1
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f01f
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      ATEMP_MCU1
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f020
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      ATEMP_MCU2
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f021
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      TEMP_Flag
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f022
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      SMO_Flag
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f023
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Offset_U1
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f024
+    /end MEASUREMENT
+    
+    
+    /begin MEASUREMENT
+      /* Name                   */      Offset_V1
+      /* Long identifier        */      ""
+      /* Data type              */      UWORD
+      /* Conversion method      */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Resolution (Not used)  */      0
+      /* Accuracy (Not used)    */      0
+      /* Lower limit            */      0
+      /* Upper limit            */      65535
+      ECU_ADDRESS                       0x0000f025
+    /end MEASUREMENT
+    
+    /begin COMPU_METHOD
+      /* Name of CompuMethod    */      Fuel_Pump_V3_1_20201113_20KHz_CM_single
+      /* Long identifier        */      "Q = V"
+      /* Conversion Type        */      RAT_FUNC
+      /* Format                 */      "%8.6"
+      /* Units                  */      ""
+      /* Coefficients           */      COEFFS 0 1 0 0 0 1
+    /end COMPU_METHOD
+    
+    /begin COMPU_METHOD
+      /* Name of CompuMethod    */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint32
+      /* Long identifier        */      "Q = V"
+      /* Conversion Type        */      RAT_FUNC
+      /* Format                 */      "%10.0"
+      /* Units                  */      ""
+      /* Coefficients           */      COEFFS 0 1 0 0 0 1
+    /end COMPU_METHOD
+    
+    /begin COMPU_METHOD
+      /* Name of CompuMethod    */      Fuel_Pump_V3_1_20201113_20KHz_CM_sfix32_En29
+      /* Long identifier        */      "Q = V*536870912.000000"
+      /* Conversion Type        */      RAT_FUNC
+      /* Format                 */      "%26.16"
+      /* Units                  */      ""
+      /* Coefficients           */      COEFFS 0 536870912.000000 0.000000 0 0 1.000000
+    /end COMPU_METHOD
+    
+    /begin COMPU_METHOD
+      /* Name of CompuMethod    */      Fuel_Pump_V3_1_20201113_20KHz_CM_uint16
+      /* Long identifier        */      "Q = V"
+      /* Conversion Type        */      RAT_FUNC
+      /* Format                 */      "%5.0"
+      /* Units                  */      ""
+      /* Coefficients           */      COEFFS 0 1 0 0 0 1
+    /end COMPU_METHOD
+    
+    /begin GROUP 
+      /* Name                   */       Fuel_Pump_V3_1_20201113_20KHz
+      /* Long identifier        */       "Fuel_Pump_V3_1_20201113_20KHz"
+      /* Root                    */       ROOT
+      /begin REF_MEASUREMENT
+        AD_Angle
+        ATEMP_MCU1
+        ATEMP_MCU2
+        Angle
+        Buffer_Flag
+        Buffer_Out_Id
+        Buffer_Out_IdDem
+        Buffer_Out_Iq
+        Buffer_Out_IqDem
+        Buffer_Out_ThetaAD2S
+        Buffer_Out_ThetaSMO
+        CPU_Timer
+        ControlMode
+        Current_U1
+        Current_V1
+        Current_W1
+        Data_Buffer_Id
+        Data_Buffer_IdDem
+        Data_Buffer_Iq
+        Data_Buffer_IqDem
+        Data_Buffer_ThetaAD2S
+        Data_Buffer_ThetaSMO
+        EMF_alpha
+        EMF_beta
+        GF_MODE
+        IF_Frq
+        I_alpha
+        I_beta
+        Id
+        IdDem
+        Iq
+        IqDem
+        LWFDem
+        LWFf
+        MCU_IN
+        MCU_ST
+        Mid_Position
+        NC1
+        NC2
+        Offset_U1
+        Offset_V1
+        Offset_W1
+        PK_KiId
+        PK_KiIq
+        PK_Kin
+        PK_KpId
+        PK_KpIq
+        PK_Kpn
+        Protect_Flag
+        RMS_Count
+        RX_DATA
+        Ready_1210
+        SCI_Break_Error
+        SCI_Error
+        SMO_A
+        SMO_ComP
+        SMO_Filter
+        SMO_Flag
+        SMO_K1
+        SMO_K2
+        SMO_KI
+        SMO_KP
+        SMO_Slide
+        SMO_Theta
+        SMO_n
+        SMO_uin
+        SetpointValue
+        Stop
+        TEMP_Flag
+        TEMP_MCU1
+        TEMP_MCU2
+        TEMP_MOT1
+        TEMP_MOT2
+        TX_DATA
+        U1
+        Ud
+        Ud_VVF
+        Uq
+        Uq_VVF
+        Us
+        V1
+        VVF_Frq
+        V_alpha
+        V_beta
+        W1
+        bFlt_LWFf
+        bFlt_MOST_T
+        bFlt_OvrLim_I
+        bFlt_OvrLim_MOST
+        bFlt_OvrLim_TempMOST
+        bFlt_OvrLim_TempUT
+        bFlt_OvrLim_TempVT
+        bFlt_OvrLim_WindingUT
+        bFlt_OvrLim_WindingVT
+        bFlt_Resolver
+        bFlt_WindingUT_Sensor
+        bFlt_WindingVT_Sensor
+        bFlt_Winding_I
+        eLWFf
+        en
+        n
+        nDem
+        nDem_PI
+        n_1210
+        n_Filter
+        n_Q
+        n_R
+        n_Step
+        uiId
+        uiIq
+        uin
+        un_PI
+      /end REF_MEASUREMENT
+    /end GROUP
+    
+    
+  /end MODULE
+  
+  
+/end PROJECT
+/* (add any file trailer comments here) */
+/* EOF Fuel_Pump_V3_1_20201113_20KHz.a2l */

@@ -1,0 +1,39 @@
+%implements "chartSource" "C"
+%function ChartConfig(block, system) void
+  %createrecord chartConfiguration { ...
+          executeAtInitialization  0 ...
+  }
+  %return chartConfiguration
+%endfunction
+%function ChartDataMap(block, system) void
+  %createrecord ChartDataElements {\
+    NumChartData   3 \
+    ChartDataDefaults {\
+      RecordType   "ChartData"\
+      Dimensions   []\
+      IsTestPoint  0\
+    }\
+    ChartData {\
+      Name         "cnt_UI"\
+      Description  "EmlPersistent"\
+      SFName       ""\
+      Path         ""\
+      SrcLocation  "Fuel_Pump_V3_1_20201113_20KHz:102:58-64"\
+    }\
+    ChartData {\
+      Name         "cnt_VI"\
+      Description  "EmlPersistent"\
+      SFName       ""\
+      Path         ""\
+      SrcLocation  "Fuel_Pump_V3_1_20201113_20KHz:102:77-83"\
+    }\
+    ChartData {\
+      Name         "cnt_WI"\
+      Description  "EmlPersistent"\
+      SFName       ""\
+      Path         ""\
+      SrcLocation  "Fuel_Pump_V3_1_20201113_20KHz:102:96-102"\
+    }\
+  }
+  %return ChartDataElements
+%endfunction

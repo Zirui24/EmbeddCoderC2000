@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="./js/coder_app.js"></script>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="./rtwreport_utils.js"></script>
+<script type="text/javascript" src="./rtwannotate.js"></script>
+<link rel="stylesheet" type="text/css" href="./css/coder_app.css"/>
+</head>
+<body onload="srcFileOnload();">
+<pre id="code">
+<table class="code" id="codeTbl">
+<tr name="1" id="1">
+<td><a id="l1" class='ln'>1</a></td><td><span class="ct">/*####################################################</span></td></tr>
+<tr name="2" id="2">
+<td><a id="l2" class='ln'>2</a></td><td><span class="ct"> * FILE: MW_c28xSPI.c</span></td></tr>
+<tr name="3" id="3">
+<td><a id="l3" class='ln'>3</a></td><td><span class="ct"> * TITLE: SPI functions to access the SPI specific registers for C2000 target</span></td></tr>
+<tr name="4" id="4">
+<td><a id="l4" class='ln'>4</a></td><td><span class="ct"> * Copyright 2017-18 The MathWorks, Inc.</span></td></tr>
+<tr name="5" id="5">
+<td><a id="l5" class='ln'>5</a></td><td><span class="ct"> * ####################################################*/</span></td></tr>
+<tr name="6" id="6">
+<td><a id="l6" class='ln'>6</a></td><td></td></tr>
+<tr name="7" id="7">
+<td><a id="l7" class='ln'>7</a></td><td><span class="ct">/* ***************************************************************************/</span></td></tr>
+<tr name="8" id="8">
+<td><a id="l8" class='ln'>8</a></td><td><span class="ct">/* the includes */</span></td></tr>
+<tr name="9" id="9">
+<td><a id="l9" class='ln'>9</a></td><td></td></tr>
+<tr name="10" id="10">
+<td><a id="l10" class='ln'>10</a></td><td><span class="pp">#include "MW_c28xSPI.h"</span></td></tr>
+<tr name="11" id="11">
+<td><a id="l11" class='ln'>11</a></td><td></td></tr>
+<tr name="12" id="12">
+<td><a id="l12" class='ln'>12</a></td><td><span class="ct">/* ***************************************************************************/</span></td></tr>
+<tr name="13" id="13">
+<td><a id="l13" class='ln'>13</a></td><td><span class="ct">/* the defines */</span></td></tr>
+<tr name="14" id="14">
+<td><a id="l14" class='ln'>14</a></td><td></td></tr>
+<tr name="15" id="15">
+<td><a id="l15" class='ln'>15</a></td><td><span class="ct">/* ***************************************************************************/</span></td></tr>
+<tr name="16" id="16">
+<td><a id="l16" class='ln'>16</a></td><td><span class="ct">/* the globals */</span></td></tr>
+<tr name="17" id="17">
+<td><a id="l17" class='ln'>17</a></td><td></td></tr>
+<tr name="18" id="18">
+<td><a id="l18" class='ln'>18</a></td><td><a id="18c1" class="tk">Uint16</a> <a id="18c8" class="tk">SPI_oneTimeInit</a>[4] = <span class="br">{</span>0, 0, 0, 0<span class="br">}</span>;</td></tr>
+<tr name="19" id="19">
+<td><a id="l19" class='ln'>19</a></td><td><a id="19c1" class="tk">MW_SpiObj</a> <a id="19c11" class="tk">mySpi</a>[<a id="19c17" class="tk">MW_MAX_SPI_MODULE</a>];</td></tr>
+<tr name="20" id="20">
+<td><a id="l20" class='ln'>20</a></td><td></td></tr>
+<tr name="21" id="21">
+<td><a id="l21" class='ln'>21</a></td><td><span class="ct">/* ***************************************************************************/</span></td></tr>
+<tr name="22" id="22">
+<td><a id="l22" class='ln'>22</a></td><td><span class="ct">/* the functions */</span></td></tr>
+<tr name="23" id="23">
+<td><a id="l23" class='ln'>23</a></td><td></td></tr>
+<tr name="24" id="24">
+<td><a id="l24" class='ln'>24</a></td><td><span class="ct">/*Initialize the SPI registers*/</span></td></tr>
+<tr name="25" id="25">
+<td><a id="l25" class='ln'>25</a></td><td><a id="25c1" class="tk">MW_SpiHandle</a> <a id="25c14" class="tk">SPI_init</a>(<a id="25c23" class="tk">Uint32</a> <a id="25c30" class="tk">SPIModule</a>)</td></tr>
+<tr name="26" id="26">
+<td><a id="l26" class='ln'>26</a></td><td><span class="br">{</span></td></tr>
+<tr name="27" id="27">
+<td><a id="l27" class='ln'>27</a></td><td>    <a id="27c5" class="tk">Uint16</a> <a id="27c12" class="tk">priority</a>;</td></tr>
+<tr name="28" id="28">
+<td><a id="l28" class='ln'>28</a></td><td>    <a id="28c5" class="tk">MW_SpiHandle</a> <a id="28c18" class="tk">SPI_obj</a> = (<a id="28c29" class="tk">MW_SpiHandle</a>)<a id="28c42" class="tk">&amp;</a><a id="28c43" class="tk">mySpi</a>[<a id="28c49" class="tk">SPIModule</a>];</td></tr>
+<tr name="29" id="29">
+<td><a id="l29" class='ln'>29</a></td><td>    </td></tr>
+<tr name="30" id="30">
+<td><a id="l30" class='ln'>30</a></td><td><span class="pp">#ifdef</span> <a id="30c8" class="tk">F2837X_REG_FORMAT</a></td></tr>
+<tr name="31" id="31">
+<td><a id="l31" class='ln'>31</a></td><td>    <a id="31c5" class="tk">EALLOW</a>;</td></tr>
+<tr name="32" id="32">
+<td><a id="l32" class='ln'>32</a></td><td>    <span class="pp">#ifdef</span> <a id="32c12" class="tk">MW_SPI_A</a></td></tr>
+<tr name="33" id="33">
+<td><a id="l33" class='ln'>33</a></td><td>    <a id="33c5" class="tk">CpuSysRegs</a>.<a id="33c16" class="tk">PCLKCR8</a>.<a id="33c24" class="tk">bit</a>.<a id="33c28" class="tk">SPI_A</a> = 1;</td></tr>
+<tr name="34" id="34">
+<td><a id="l34" class='ln'>34</a></td><td>    <span class="pp">#endif</span></td></tr>
+<tr name="35" id="35">
+<td><a id="l35" class='ln'>35</a></td><td>    <span class="pp">#ifdef</span> <a id="35c12" class="tk">MW_SPI_B</a></td></tr>
+<tr name="36" id="36">
+<td><a id="l36" class='ln'>36</a></td><td>    <a id="36c5" class="tk">CpuSysRegs</a>.<a id="36c16" class="tk">PCLKCR8</a>.<a id="36c24" class="tk">bit</a>.<a id="36c28" class="tk">SPI_B</a> = 1;</td></tr>
+<tr name="37" id="37">
+<td><a id="l37" class='ln'>37</a></td><td>    <span class="pp">#endif</span></td></tr>
+<tr name="38" id="38">
+<td><a id="l38" class='ln'>38</a></td><td>    <span class="pp">#ifdef</span> <a id="38c12" class="tk">MW_SPI_C</a></td></tr>
+<tr name="39" id="39">
+<td><a id="l39" class='ln'>39</a></td><td>    <a id="39c5" class="tk">CpuSysRegs</a>.<a id="39c16" class="tk">PCLKCR8</a>.<a id="39c24" class="tk">bit</a>.<a id="39c28" class="tk">SPI_C</a> = 1;</td></tr>
+<tr name="40" id="40">
+<td><a id="l40" class='ln'>40</a></td><td>    <span class="pp">#endif</span></td></tr>
+<tr name="41" id="41">
+<td><a id="l41" class='ln'>41</a></td><td>    <a id="41c5" class="tk">EDIS</a>;</td></tr>
+<tr name="42" id="42">
+<td><a id="l42" class='ln'>42</a></td><td><span class="pp">#endif</span></td></tr>
+<tr name="43" id="43">
+<td><a id="l43" class='ln'>43</a></td><td>    </td></tr>
+<tr name="44" id="44">
+<td><a id="l44" class='ln'>44</a></td><td><span class="pp">#ifdef</span> <a id="44c8" class="tk">MW_F281X</a></td></tr>
+<tr name="45" id="45">
+<td><a id="l45" class='ln'>45</a></td><td>            <span class="kw">if</span> (<a id="45c17" class="tk">SPI_oneTimeInit</a>[0] <a id="45c36" class="tk">==</a> 0)</td></tr>
+<tr name="46" id="46">
+<td><a id="l46" class='ln'>46</a></td><td>            <span class="br">{</span></td></tr>
+<tr name="47" id="47">
+<td><a id="l47" class='ln'>47</a></td><td>                <a id="47c17" class="tk">SPI_obj</a>-&gt;<a id="47c26" class="tk">spi_base_address</a> = (<a id="47c46" class="tk">SPI_REG_ADDRESS</a>)<a id="47c62" class="tk">&amp;</a><a id="47c63" class="tk">SpiaRegs</a>;</td></tr>
+<tr name="48" id="48">
+<td><a id="l48" class='ln'>48</a></td><td>                <a id="48c17" class="tk">SPI_obj</a>-&gt;<a id="48c26" class="tk">spi_clk_mode</a> = 0;</td></tr>
+<tr name="49" id="49">
+<td><a id="l49" class='ln'>49</a></td><td>                <a id="49c17" class="tk">SPI_obj</a>-&gt;<a id="49c26" class="tk">charLength</a> = 0;</td></tr>
+<tr name="50" id="50">
+<td><a id="l50" class='ln'>50</a></td><td>                <a id="50c17" class="tk">SPI_obj</a>-&gt;<a id="50c26" class="tk">fifoLevel</a> = <a id="50c38" class="tk">MW_SPI_FIFO_LEVEL</a>;</td></tr>
+<tr name="51" id="51">
+<td><a id="l51" class='ln'>51</a></td><td>                <a id="51c17" class="tk">SPI_obj</a>-&gt;<a id="51c26" class="tk">txInterrupt</a> = <a id="51c40" class="tk">MW_SPI_TXINTERRUPTENABLE</a>;</td></tr>
+<tr name="52" id="52">
+<td><a id="l52" class='ln'>52</a></td><td>                <span class="kw">if</span> (<a id="52c21" class="tk">MW_SPI_SUSPENSIONMODE</a> <a id="52c43" class="tk">==</a> 0)</td></tr>
+<tr name="53" id="53">
+<td><a id="l53" class='ln'>53</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="54" id="54">
+<td><a id="l54" class='ln'>54</a></td><td>                    <a id="54c21" class="tk">priority</a> = 0;</td></tr>
+<tr name="55" id="55">
+<td><a id="l55" class='ln'>55</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="56" id="56">
+<td><a id="l56" class='ln'>56</a></td><td>                <span class="kw">else</span> <span class="kw">if</span> (<a id="56c26" class="tk">MW_SPI_SUSPENSIONMODE</a> <a id="56c48" class="tk">==</a> 1)</td></tr>
+<tr name="57" id="57">
+<td><a id="l57" class='ln'>57</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="58" id="58">
+<td><a id="l58" class='ln'>58</a></td><td>                    <a id="58c21" class="tk">priority</a> = 2;</td></tr>
+<tr name="59" id="59">
+<td><a id="l59" class='ln'>59</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="60" id="60">
+<td><a id="l60" class='ln'>60</a></td><td>                <span class="kw">else</span></td></tr>
+<tr name="61" id="61">
+<td><a id="l61" class='ln'>61</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="62" id="62">
+<td><a id="l62" class='ln'>62</a></td><td>                    <a id="62c21" class="tk">priority</a> = 1;</td></tr>
+<tr name="63" id="63">
+<td><a id="l63" class='ln'>63</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="64" id="64">
+<td><a id="l64" class='ln'>64</a></td><td>                <span class="ct">/*TRIWIRE - Master, SIMO / Slave, SOMI*/</span></td></tr>
+<tr name="65" id="65">
+<td><a id="l65" class='ln'>65</a></td><td>                <a id="65c17" class="tk">EALLOW</a>;</td></tr>
+<tr name="66" id="66">
+<td><a id="l66" class='ln'>66</a></td><td>                <a id="66c17" class="tk">GpioMuxRegs</a>.<a id="66c29" class="tk">GPFMUX</a>.<a id="66c36" class="tk">all</a><a id="66c39" class="tk">|=</a>0x0007;      <span class="ct">/* Select GPIOs to be SPI pins, Port F MUX - x000 0000 0000 0111*/</span></td></tr>
+<tr name="67" id="67">
+<td><a id="l67" class='ln'>67</a></td><td>                <a id="67c17" class="tk">GpioMuxRegs</a>.<a id="67c29" class="tk">GPFMUX</a>.<a id="67c36" class="tk">all</a><a id="67c39" class="tk">|=</a>0x0008;      <span class="ct">/* Select GPIOs to be SPISTE pin, Port F MUX - x000 0000 0000 1000*/</span></td></tr>
+<tr name="68" id="68">
+<td><a id="l68" class='ln'>68</a></td><td>                <a id="68c17" class="tk">EDIS</a>;</td></tr>
+<tr name="69" id="69">
+<td><a id="l69" class='ln'>69</a></td><td>                </td></tr>
+<tr name="70" id="70">
+<td><a id="l70" class='ln'>70</a></td><td>                <a id="70c17" class="tk">*</a>((<a id="70c20" class="tk">SPI_obj</a>-&gt;<a id="70c29" class="tk">spi_base_address</a>) <a id="70c47" class="tk">+</a> <a id="70c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="70c68" class="tk">&amp;=</a> (<a id="70c72" class="tk">~</a>(<a id="70c74" class="tk">SPICCR_SPISWRESET_BITS</a> <a id="70c97" class="tk">&lt;&lt;</a> <a id="70c100" class="tk">SPICCR_SPISWRESET_SHIFT</a>));</td></tr>
+<tr name="71" id="71">
+<td><a id="l71" class='ln'>71</a></td><td>                <a id="71c17" class="tk">*</a>((<a id="71c20" class="tk">SPI_obj</a>-&gt;<a id="71c29" class="tk">spi_base_address</a>) <a id="71c47" class="tk">+</a> <a id="71c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="71c68" class="tk">|=</a> (<a id="71c72" class="tk">Uint16</a>)((<a id="71c81" class="tk">MW_SPI_ENABLELOOPBACK</a> <a id="71c103" class="tk">&amp;</a> <a id="71c105" class="tk">SPICCR_SPILBK_BITS</a>) <a id="71c125" class="tk">&lt;&lt;</a> <a id="71c128" class="tk">SPICCR_SPILBK_SHIFT</a>);</td></tr>
+<tr name="72" id="72">
+<td><a id="l72" class='ln'>72</a></td><td>                <a id="72c17" class="tk">*</a>((<a id="72c20" class="tk">SPI_obj</a>-&gt;<a id="72c29" class="tk">spi_base_address</a>) <a id="72c47" class="tk">+</a> <a id="72c49" class="tk">SPICTL_REG_OFFSET</a>) <a id="72c68" class="tk">|=</a> (<a id="72c72" class="tk">Uint16</a>)(((<a id="72c82" class="tk">~</a><a id="72c83" class="tk">MW_SPI_MODE</a>) <a id="72c96" class="tk">&amp;</a> <a id="72c98" class="tk">SPICTL_MASTER_SLAVE_BITS</a>) <a id="72c124" class="tk">&lt;&lt;</a> <a id="72c127" class="tk">SPICTL_MASTER_SLAVE_SHIFT</a>);</td></tr>
+<tr name="73" id="73">
+<td><a id="l73" class='ln'>73</a></td><td>                <a id="73c17" class="tk">*</a>((<a id="73c20" class="tk">SPI_obj</a>-&gt;<a id="73c29" class="tk">spi_base_address</a>) <a id="73c47" class="tk">+</a> <a id="73c49" class="tk">SPICTL_REG_OFFSET</a>) <a id="73c68" class="tk">|=</a> (<a id="73c72" class="tk">Uint16</a>)((<a id="73c81" class="tk">SPICTL_TALK_BITS</a>) <a id="73c99" class="tk">&lt;&lt;</a> <a id="73c102" class="tk">SPICTL_TALK_SHIFT</a>);</td></tr>
+<tr name="74" id="74">
+<td><a id="l74" class='ln'>74</a></td><td>                <a id="74c17" class="tk">*</a>((<a id="74c20" class="tk">SPI_obj</a>-&gt;<a id="74c29" class="tk">spi_base_address</a>) <a id="74c47" class="tk">+</a> <a id="74c49" class="tk">SPIBRR_REG_OFFSET</a>) <a id="74c68" class="tk">|=</a> (<a id="74c72" class="tk">Uint16</a>)(((<a id="74c82" class="tk">Uint16</a>)<a id="74c89" class="tk">MW_SPI_BAUDRATEFACTOR</a> <a id="74c111" class="tk">&amp;</a> <a id="74c113" class="tk">SPIBRR_SPI_BIT_RATE_BITS</a>) <a id="74c139" class="tk">&lt;&lt;</a> <a id="74c142" class="tk">SPIBRR_SPI_BIT_RATE_SHIFT</a>);</td></tr>
+<tr name="75" id="75">
+<td><a id="l75" class='ln'>75</a></td><td></td></tr>
+<tr name="76" id="76">
+<td><a id="l76" class='ln'>76</a></td><td>                <a id="76c17" class="tk">*</a>((<a id="76c20" class="tk">SPI_obj</a>-&gt;<a id="76c29" class="tk">spi_base_address</a>) <a id="76c47" class="tk">+</a> <a id="76c49" class="tk">SPIPRI_REG_OFFSET</a>) <a id="76c68" class="tk">|=</a> (<a id="76c72" class="tk">Uint16</a>)((<a id="76c81" class="tk">priority</a> <a id="76c90" class="tk">&amp;</a> <a id="76c92" class="tk">SPIPRI_SOFT_FREE_BITS</a>) <a id="76c115" class="tk">&lt;&lt;</a> <a id="76c118" class="tk">SPIPRI_SOFT_FREE_SHIFT</a>);</td></tr>
+<tr name="77" id="77">
+<td><a id="l77" class='ln'>77</a></td><td>                <a id="77c17" class="tk">*</a>((<a id="77c20" class="tk">SPI_obj</a>-&gt;<a id="77c29" class="tk">spi_base_address</a>) <a id="77c47" class="tk">+</a> <a id="77c49" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="77c69" class="tk">|=</a> ((<a id="77c74" class="tk">SPIFFTX_SPIFFENA_BITS</a>) <a id="77c97" class="tk">&lt;&lt;</a> <a id="77c100" class="tk">SPIFFTX_SPIFFENA_SHIFT</a>);</td></tr>
+<tr name="78" id="78">
+<td><a id="l78" class='ln'>78</a></td><td>                <a id="78c17" class="tk">*</a>((<a id="78c20" class="tk">SPI_obj</a>-&gt;<a id="78c29" class="tk">spi_base_address</a>) <a id="78c47" class="tk">+</a> <a id="78c49" class="tk">SPIFFCT_REG_OFFSET</a>) <a id="78c69" class="tk">|=</a> ((<a id="78c74" class="tk">MW_SPI_FIFOTRANSMITDELAY</a> <a id="78c99" class="tk">&amp;</a> <a id="78c101" class="tk">SPIFFCT_TXDLY_BITS</a>) <a id="78c121" class="tk">&lt;&lt;</a> <a id="78c124" class="tk">SPIFFCT_TXDLY_SHIFT</a>);</td></tr>
+<tr name="79" id="79">
+<td><a id="l79" class='ln'>79</a></td><td></td></tr>
+<tr name="80" id="80">
+<td><a id="l80" class='ln'>80</a></td><td>                <span class="ct">/* Set the TX Interrupt FIFO level only at the init. Enable the FIFO interrupt only after TX buffer is full */</span></td></tr>
+<tr name="81" id="81">
+<td><a id="l81" class='ln'>81</a></td><td>                <a id="81c17" class="tk">*</a>((<a id="81c20" class="tk">SPI_obj</a>-&gt;<a id="81c29" class="tk">spi_base_address</a>) <a id="81c47" class="tk">+</a> <a id="81c49" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="81c69" class="tk">|=</a> ((<a id="81c74" class="tk">MW_SPI_FIFOINTERRUPTLEVEL_TX</a> <a id="81c103" class="tk">&amp;</a> <a id="81c105" class="tk">SPIFFTX_TXFFIL_BITS</a>) <a id="81c126" class="tk">&lt;&lt;</a> <a id="81c129" class="tk">SPIFFTX_TXFFIL_SHIFT</a>);</td></tr>
+<tr name="82" id="82">
+<td><a id="l82" class='ln'>82</a></td><td></td></tr>
+<tr name="83" id="83">
+<td><a id="l83" class='ln'>83</a></td><td>                <a id="83c17" class="tk">*</a>((<a id="83c20" class="tk">SPI_obj</a>-&gt;<a id="83c29" class="tk">spi_base_address</a>) <a id="83c47" class="tk">+</a> <a id="83c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="83c69" class="tk">&amp;=</a> (<a id="83c73" class="tk">~</a>(<a id="83c75" class="tk">SPIFFRX_RXFFIL_BITS</a> <a id="83c95" class="tk">&lt;&lt;</a> <a id="83c98" class="tk">SPIFFRX_RXFFIL_SHIFT</a>));</td></tr>
+<tr name="84" id="84">
+<td><a id="l84" class='ln'>84</a></td><td>                <a id="84c17" class="tk">*</a>((<a id="84c20" class="tk">SPI_obj</a>-&gt;<a id="84c29" class="tk">spi_base_address</a>) <a id="84c47" class="tk">+</a> <a id="84c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="84c69" class="tk">|=</a> ((<a id="84c74" class="tk">MW_SPI_FIFOINTERRUPTLEVEL_RX</a> <a id="84c103" class="tk">&amp;</a> <a id="84c105" class="tk">SPIFFRX_RXFFIL_BITS</a>) <a id="84c126" class="tk">&lt;&lt;</a> <a id="84c129" class="tk">SPIFFRX_RXFFIL_SHIFT</a>);</td></tr>
+<tr name="85" id="85">
+<td><a id="l85" class='ln'>85</a></td><td>                <a id="85c17" class="tk">*</a>((<a id="85c20" class="tk">SPI_obj</a>-&gt;<a id="85c29" class="tk">spi_base_address</a>) <a id="85c47" class="tk">+</a> <a id="85c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="85c69" class="tk">|=</a> (<a id="85c73" class="tk">SPIFFRX_RXFFINTCLR_BITS</a> <a id="85c97" class="tk">&lt;&lt;</a> <a id="85c100" class="tk">SPIFFRX_RXFFINTCLR_SHIFT</a>);</td></tr>
+<tr name="86" id="86">
+<td><a id="l86" class='ln'>86</a></td><td>                <a id="86c17" class="tk">*</a>((<a id="86c20" class="tk">SPI_obj</a>-&gt;<a id="86c29" class="tk">spi_base_address</a>) <a id="86c47" class="tk">+</a> <a id="86c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="86c69" class="tk">|=</a> ((<a id="86c74" class="tk">MW_SPI_RXINTERRUPTENABLE</a> <a id="86c99" class="tk">&amp;</a> <a id="86c101" class="tk">SPIFFRX_RXFFIENA_BITS</a>) <a id="86c124" class="tk">&lt;&lt;</a> <a id="86c127" class="tk">SPIFFRX_RXFFIENA_SHIFT</a>);</td></tr>
+<tr name="87" id="87">
+<td><a id="l87" class='ln'>87</a></td><td></td></tr>
+<tr name="88" id="88">
+<td><a id="l88" class='ln'>88</a></td><td>                <a id="88c17" class="tk">*</a>((<a id="88c20" class="tk">SPI_obj</a>-&gt;<a id="88c29" class="tk">spi_base_address</a>) <a id="88c47" class="tk">+</a> <a id="88c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="88c68" class="tk">|=</a> (<a id="88c72" class="tk">Uint16</a>)(<a id="88c80" class="tk">SPICCR_SPISWRESET_BITS</a> <a id="88c103" class="tk">&lt;&lt;</a> <a id="88c106" class="tk">SPICCR_SPISWRESET_SHIFT</a>);</td></tr>
+<tr name="89" id="89">
+<td><a id="l89" class='ln'>89</a></td><td>                <a id="89c17" class="tk">SPI_oneTimeInit</a>[0] = 1;</td></tr>
+<tr name="90" id="90">
+<td><a id="l90" class='ln'>90</a></td><td>            <span class="br">}</span>            </td></tr>
+<tr name="91" id="91">
+<td><a id="l91" class='ln'>91</a></td><td><span class="pp">#else</span> <span class="ct">//Else of MW_F281X</span></td></tr>
+<tr name="92" id="92">
+<td><a id="l92" class='ln'>92</a></td><td>    <span class="kw">switch</span>(<a id="92c12" class="tk">SPIModule</a>)</td></tr>
+<tr name="93" id="93">
+<td><a id="l93" class='ln'>93</a></td><td>    <span class="br">{</span></td></tr>
+<tr name="94" id="94">
+<td><a id="l94" class='ln'>94</a></td><td>        <span class="kw">case</span> 0<a id="94c15" class="tk">:</a> <span class="ct">//SPI Module A</span></td></tr>
+<tr name="95" id="95">
+<td><a id="l95" class='ln'>95</a></td><td>        <span class="br">{</span></td></tr>
+<tr name="96" id="96">
+<td><a id="l96" class='ln'>96</a></td><td><span class="pp">#ifdef</span> <a id="96c8" class="tk">MW_SPI_A</a></td></tr>
+<tr name="97" id="97">
+<td><a id="l97" class='ln'>97</a></td><td>            <span class="kw">if</span> (<a id="97c17" class="tk">SPI_oneTimeInit</a>[0] <a id="97c36" class="tk">==</a> 0)</td></tr>
+<tr name="98" id="98">
+<td><a id="l98" class='ln'>98</a></td><td>            <span class="br">{</span></td></tr>
+<tr name="99" id="99">
+<td><a id="l99" class='ln'>99</a></td><td>                <a id="99c17" class="tk">SPI_obj</a>-&gt;<a id="99c26" class="tk">spi_base_address</a> = (<a id="99c46" class="tk">SPI_REG_ADDRESS</a>)<a id="99c62" class="tk">&amp;</a><a id="99c63" class="tk">SpiaRegs</a>;</td></tr>
+<tr name="100" id="100">
+<td><a id="l100" class='ln'>100</a></td><td>                <a id="100c17" class="tk">SPI_obj</a>-&gt;<a id="100c26" class="tk">spi_clk_mode</a> = 0;</td></tr>
+<tr name="101" id="101">
+<td><a id="l101" class='ln'>101</a></td><td>                <a id="101c17" class="tk">SPI_obj</a>-&gt;<a id="101c26" class="tk">charLength</a> = 0;</td></tr>
+<tr name="102" id="102">
+<td><a id="l102" class='ln'>102</a></td><td>                <a id="102c17" class="tk">SPI_obj</a>-&gt;<a id="102c26" class="tk">fifoLevel</a> = <a id="102c38" class="tk">MW_SPI_A_FIFO_LEVEL</a>;</td></tr>
+<tr name="103" id="103">
+<td><a id="l103" class='ln'>103</a></td><td>                <a id="103c17" class="tk">SPI_obj</a>-&gt;<a id="103c26" class="tk">txInterrupt</a> = <a id="103c40" class="tk">MW_SPI_A_TXINTERRUPTENABLE</a>;</td></tr>
+<tr name="104" id="104">
+<td><a id="l104" class='ln'>104</a></td><td>                <span class="kw">if</span> (<a id="104c21" class="tk">MW_SPI_A_SUSPENSIONMODE</a> <a id="104c45" class="tk">==</a> 0)</td></tr>
+<tr name="105" id="105">
+<td><a id="l105" class='ln'>105</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="106" id="106">
+<td><a id="l106" class='ln'>106</a></td><td>                    <a id="106c21" class="tk">priority</a> = 0;</td></tr>
+<tr name="107" id="107">
+<td><a id="l107" class='ln'>107</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="108" id="108">
+<td><a id="l108" class='ln'>108</a></td><td>                <span class="kw">else</span> <span class="kw">if</span> (<a id="108c26" class="tk">MW_SPI_A_SUSPENSIONMODE</a> <a id="108c50" class="tk">==</a> 1)</td></tr>
+<tr name="109" id="109">
+<td><a id="l109" class='ln'>109</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="110" id="110">
+<td><a id="l110" class='ln'>110</a></td><td>                    <a id="110c21" class="tk">priority</a> = 2;</td></tr>
+<tr name="111" id="111">
+<td><a id="l111" class='ln'>111</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="112" id="112">
+<td><a id="l112" class='ln'>112</a></td><td>                <span class="kw">else</span></td></tr>
+<tr name="113" id="113">
+<td><a id="l113" class='ln'>113</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="114" id="114">
+<td><a id="l114" class='ln'>114</a></td><td>                    <a id="114c21" class="tk">priority</a> = 1;</td></tr>
+<tr name="115" id="115">
+<td><a id="l115" class='ln'>115</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="116" id="116">
+<td><a id="l116" class='ln'>116</a></td><td>                <span class="ct">/*TRIWIRE - Master, SIMO / Slave, SOMI*/</span></td></tr>
+<tr name="117" id="117">
+<td><a id="l117" class='ln'>117</a></td><td><span class="pp">#ifdef</span> <a id="117c8" class="tk">MW_SPI_A_ENABLETHREEWIRE</a></td></tr>
+<tr name="118" id="118">
+<td><a id="l118" class='ln'>118</a></td><td>    <span class="pp">#if</span>  <a id="118c10" class="tk">MW_SPI_A_ENABLETHREEWIRE</a> <a id="118c35" class="tk">==</a> 1</td></tr>
+<tr name="119" id="119">
+<td><a id="l119" class='ln'>119</a></td><td>        <span class="pp">#if</span> <a id="119c13" class="tk">MW_SPI_A_MODE</a> <a id="119c27" class="tk">==</a> 0</td></tr>
+<tr name="120" id="120">
+<td><a id="l120" class='ln'>120</a></td><td>                <a id="120c17" class="tk">Set_GPIOPin</a>(<a id="120c29" class="tk">MW_SPI_A_PINVALUE_SIMO</a>, <a id="120c53" class="tk">GPIO_MUX_CPU1</a>, <a id="120c68" class="tk">MW_SPI_A_PINMUX_SIMO</a>, <a id="120c90" class="tk">GPIO_OUTPUT</a>, <a id="120c103" class="tk">GPIO_PULLUP</a><a id="120c114" class="tk">|</a><a id="120c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="121" id="121">
+<td><a id="l121" class='ln'>121</a></td><td>        <span class="pp">#else</span> <span class="ct">//MW_SPI_A_MODE 1</span></td></tr>
+<tr name="122" id="122">
+<td><a id="l122" class='ln'>122</a></td><td>               <a id="122c16" class="tk">Set_GPIOPin</a>(<a id="122c28" class="tk">MW_SPI_A_PINVALUE_SOMI</a>, <a id="122c52" class="tk">GPIO_MUX_CPU1</a>, <a id="122c67" class="tk">MW_SPI_A_PINMUX_SOMI</a>, <a id="122c89" class="tk">GPIO_INPUT</a>, <a id="122c101" class="tk">GPIO_PULLUP</a><a id="122c112" class="tk">|</a><a id="122c113" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="123" id="123">
+<td><a id="l123" class='ln'>123</a></td><td>        <span class="pp">#endif</span> <span class="ct">//MW_SPI_A_MODE</span></td></tr>
+<tr name="124" id="124">
+<td><a id="l124" class='ln'>124</a></td><td>    <span class="pp">#else</span> <span class="ct">// MW_SPI_A_ENABLETHREEWIRE 0</span></td></tr>
+<tr name="125" id="125">
+<td><a id="l125" class='ln'>125</a></td><td>        <span class="pp">#if</span> <a id="125c13" class="tk">MW_SPI_A_MODE</a> <a id="125c27" class="tk">==</a> 0</td></tr>
+<tr name="126" id="126">
+<td><a id="l126" class='ln'>126</a></td><td>                <a id="126c17" class="tk">Set_GPIOPin</a>(<a id="126c29" class="tk">MW_SPI_A_PINVALUE_SIMO</a>, <a id="126c53" class="tk">GPIO_MUX_CPU1</a>, <a id="126c68" class="tk">MW_SPI_A_PINMUX_SIMO</a>, <a id="126c90" class="tk">GPIO_OUTPUT</a>, <a id="126c103" class="tk">GPIO_PULLUP</a><a id="126c114" class="tk">|</a><a id="126c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="127" id="127">
+<td><a id="l127" class='ln'>127</a></td><td>                <a id="127c17" class="tk">Set_GPIOPin</a>(<a id="127c29" class="tk">MW_SPI_A_PINVALUE_SOMI</a>, <a id="127c53" class="tk">GPIO_MUX_CPU1</a>, <a id="127c68" class="tk">MW_SPI_A_PINMUX_SOMI</a>, <a id="127c90" class="tk">GPIO_INPUT</a>, <a id="127c102" class="tk">GPIO_PULLUP</a><a id="127c113" class="tk">|</a><a id="127c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="128" id="128">
+<td><a id="l128" class='ln'>128</a></td><td>        <span class="pp">#else</span> <span class="ct">//MW_SPI_A_MODE 1</span></td></tr>
+<tr name="129" id="129">
+<td><a id="l129" class='ln'>129</a></td><td>                <a id="129c17" class="tk">Set_GPIOPin</a>(<a id="129c29" class="tk">MW_SPI_A_PINVALUE_SIMO</a>, <a id="129c53" class="tk">GPIO_MUX_CPU1</a>, <a id="129c68" class="tk">MW_SPI_A_PINMUX_SIMO</a>, <a id="129c90" class="tk">GPIO_INPUT</a>, <a id="129c102" class="tk">GPIO_PULLUP</a><a id="129c113" class="tk">|</a><a id="129c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="130" id="130">
+<td><a id="l130" class='ln'>130</a></td><td>                <a id="130c17" class="tk">Set_GPIOPin</a>(<a id="130c29" class="tk">MW_SPI_A_PINVALUE_SOMI</a>, <a id="130c53" class="tk">GPIO_MUX_CPU1</a>, <a id="130c68" class="tk">MW_SPI_A_PINMUX_SOMI</a>, <a id="130c90" class="tk">GPIO_OUTPUT</a>, <a id="130c103" class="tk">GPIO_PULLUP</a><a id="130c114" class="tk">|</a><a id="130c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="131" id="131">
+<td><a id="l131" class='ln'>131</a></td><td>        <span class="pp">#endif</span> <span class="ct">//MW_SPI_A_MODE</span></td></tr>
+<tr name="132" id="132">
+<td><a id="l132" class='ln'>132</a></td><td>    <span class="pp">#endif</span></td></tr>
+<tr name="133" id="133">
+<td><a id="l133" class='ln'>133</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_A_ENABLETHREEWIRE not defined</span></td></tr>
+<tr name="134" id="134">
+<td><a id="l134" class='ln'>134</a></td><td>    <span class="pp">#if</span> <a id="134c9" class="tk">MW_SPI_A_MODE</a> <a id="134c23" class="tk">==</a> 0</td></tr>
+<tr name="135" id="135">
+<td><a id="l135" class='ln'>135</a></td><td>                <a id="135c17" class="tk">Set_GPIOPin</a>(<a id="135c29" class="tk">MW_SPI_A_PINVALUE_SIMO</a>, <a id="135c53" class="tk">GPIO_MUX_CPU1</a>, <a id="135c68" class="tk">MW_SPI_A_PINMUX_SIMO</a>, <a id="135c90" class="tk">GPIO_OUTPUT</a>, <a id="135c103" class="tk">GPIO_PULLUP</a><a id="135c114" class="tk">|</a><a id="135c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="136" id="136">
+<td><a id="l136" class='ln'>136</a></td><td>                <a id="136c17" class="tk">Set_GPIOPin</a>(<a id="136c29" class="tk">MW_SPI_A_PINVALUE_SOMI</a>, <a id="136c53" class="tk">GPIO_MUX_CPU1</a>, <a id="136c68" class="tk">MW_SPI_A_PINMUX_SOMI</a>, <a id="136c90" class="tk">GPIO_INPUT</a>, <a id="136c102" class="tk">GPIO_PULLUP</a><a id="136c113" class="tk">|</a><a id="136c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="137" id="137">
+<td><a id="l137" class='ln'>137</a></td><td>    <span class="pp">#else</span> <span class="ct">//MW_SPI_A_MODE 1</span></td></tr>
+<tr name="138" id="138">
+<td><a id="l138" class='ln'>138</a></td><td>                <a id="138c17" class="tk">Set_GPIOPin</a>(<a id="138c29" class="tk">MW_SPI_A_PINVALUE_SIMO</a>, <a id="138c53" class="tk">GPIO_MUX_CPU1</a>, <a id="138c68" class="tk">MW_SPI_A_PINMUX_SIMO</a>, <a id="138c90" class="tk">GPIO_INPUT</a>, <a id="138c102" class="tk">GPIO_PULLUP</a><a id="138c113" class="tk">|</a><a id="138c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="139" id="139">
+<td><a id="l139" class='ln'>139</a></td><td>                <a id="139c17" class="tk">Set_GPIOPin</a>(<a id="139c29" class="tk">MW_SPI_A_PINVALUE_SOMI</a>, <a id="139c53" class="tk">GPIO_MUX_CPU1</a>, <a id="139c68" class="tk">MW_SPI_A_PINMUX_SOMI</a>, <a id="139c90" class="tk">GPIO_OUTPUT</a>, <a id="139c103" class="tk">GPIO_PULLUP</a><a id="139c114" class="tk">|</a><a id="139c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="140" id="140">
+<td><a id="l140" class='ln'>140</a></td><td>    <span class="pp">#endif</span> <span class="ct">//MW_SPI_A_MODE</span></td></tr>
+<tr name="141" id="141">
+<td><a id="l141" class='ln'>141</a></td><td><span class="pp">#endif</span> <span class="ct">// End of MW_SPI_A_ENABLETHREEWIRE</span></td></tr>
+<tr name="142" id="142">
+<td><a id="l142" class='ln'>142</a></td><td>                </td></tr>
+<tr name="143" id="143">
+<td><a id="l143" class='ln'>143</a></td><td><span class="pp">#if</span> <a id="143c5" class="tk">MW_SPI_A_MODE</a> <a id="143c19" class="tk">==</a> 0</td></tr>
+<tr name="144" id="144">
+<td><a id="l144" class='ln'>144</a></td><td>                <a id="144c17" class="tk">Set_GPIOPin</a>(<a id="144c29" class="tk">MW_SPI_A_PINVALUE_CLK</a>, <a id="144c52" class="tk">GPIO_MUX_CPU1</a>, <a id="144c67" class="tk">MW_SPI_A_PINMUX_CLK</a>, <a id="144c88" class="tk">GPIO_OUTPUT</a>, <a id="144c101" class="tk">GPIO_PULLUP</a><a id="144c112" class="tk">|</a><a id="144c113" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="145" id="145">
+<td><a id="l145" class='ln'>145</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_A_MODE 1</span></td></tr>
+<tr name="146" id="146">
+<td><a id="l146" class='ln'>146</a></td><td>                <a id="146c17" class="tk">Set_GPIOPin</a>(<a id="146c29" class="tk">MW_SPI_A_PINVALUE_CLK</a>, <a id="146c52" class="tk">GPIO_MUX_CPU1</a>, <a id="146c67" class="tk">MW_SPI_A_PINMUX_CLK</a>, <a id="146c88" class="tk">GPIO_INPUT</a>, <a id="146c100" class="tk">GPIO_PULLUP</a><a id="146c111" class="tk">|</a><a id="146c112" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="147" id="147">
+<td><a id="l147" class='ln'>147</a></td><td><span class="pp">#endif</span> <span class="ct">//MW_SPI_A_MODE</span></td></tr>
+<tr name="148" id="148">
+<td><a id="l148" class='ln'>148</a></td><td></td></tr>
+<tr name="149" id="149">
+<td><a id="l149" class='ln'>149</a></td><td><span class="pp">#ifdef</span> <a id="149c8" class="tk">MW_SPISTE_SELECT_SPI_A</a></td></tr>
+<tr name="150" id="150">
+<td><a id="l150" class='ln'>150</a></td><td>                <span class="kw">if</span> (<a id="150c21" class="tk">MW_SPI_A_PINVALUE_STE</a> <a id="150c43" class="tk">&gt;=</a> 0)</td></tr>
+<tr name="151" id="151">
+<td><a id="l151" class='ln'>151</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="152" id="152">
+<td><a id="l152" class='ln'>152</a></td><td><span class="pp">#if</span> <a id="152c5" class="tk">MW_SPI_A_MODE</a> <a id="152c19" class="tk">==</a> 0</td></tr>
+<tr name="153" id="153">
+<td><a id="l153" class='ln'>153</a></td><td>                   <a id="153c20" class="tk">Set_GPIOPin</a>(<a id="153c32" class="tk">MW_SPI_A_PINVALUE_STE</a>, <a id="153c55" class="tk">GPIO_MUX_CPU1</a>, <a id="153c70" class="tk">MW_SPI_A_PINMUX_STE</a>, <a id="153c91" class="tk">GPIO_OUTPUT</a>, <a id="153c104" class="tk">GPIO_PULLUP</a><a id="153c115" class="tk">|</a><a id="153c116" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="154" id="154">
+<td><a id="l154" class='ln'>154</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_A_MODE 1</span></td></tr>
+<tr name="155" id="155">
+<td><a id="l155" class='ln'>155</a></td><td>                   <a id="155c20" class="tk">Set_GPIOPin</a>(<a id="155c32" class="tk">MW_SPI_A_PINVALUE_STE</a>, <a id="155c55" class="tk">GPIO_MUX_CPU1</a>, <a id="155c70" class="tk">MW_SPI_A_PINMUX_STE</a>, <a id="155c91" class="tk">GPIO_INPUT</a>, <a id="155c103" class="tk">GPIO_PULLUP</a><a id="155c114" class="tk">|</a><a id="155c115" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="156" id="156">
+<td><a id="l156" class='ln'>156</a></td><td><span class="pp">#endif</span> <span class="ct">//MW_SPI_A_MODE</span></td></tr>
+<tr name="157" id="157">
+<td><a id="l157" class='ln'>157</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="158" id="158">
+<td><a id="l158" class='ln'>158</a></td><td><span class="pp">#endif</span> <span class="ct">//End of MW_SPISTE_SELECT_SPI_A</span></td></tr>
+<tr name="159" id="159">
+<td><a id="l159" class='ln'>159</a></td><td>                </td></tr>
+<tr name="160" id="160">
+<td><a id="l160" class='ln'>160</a></td><td>                <a id="160c17" class="tk">*</a>((<a id="160c20" class="tk">SPI_obj</a>-&gt;<a id="160c29" class="tk">spi_base_address</a>) <a id="160c47" class="tk">+</a> <a id="160c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="160c68" class="tk">&amp;=</a> (<a id="160c72" class="tk">~</a>(<a id="160c74" class="tk">SPICCR_SPISWRESET_BITS</a> <a id="160c97" class="tk">&lt;&lt;</a> <a id="160c100" class="tk">SPICCR_SPISWRESET_SHIFT</a>));</td></tr>
+<tr name="161" id="161">
+<td><a id="l161" class='ln'>161</a></td><td>                <a id="161c17" class="tk">*</a>((<a id="161c20" class="tk">SPI_obj</a>-&gt;<a id="161c29" class="tk">spi_base_address</a>) <a id="161c47" class="tk">+</a> <a id="161c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="161c68" class="tk">|=</a> (<a id="161c72" class="tk">Uint16</a>)((<a id="161c81" class="tk">MW_SPI_A_ENABLELOOPBACK</a> <a id="161c105" class="tk">&amp;</a> <a id="161c107" class="tk">SPICCR_SPILBK_BITS</a>) <a id="161c127" class="tk">&lt;&lt;</a> <a id="161c130" class="tk">SPICCR_SPILBK_SHIFT</a>);</td></tr>
+<tr name="162" id="162">
+<td><a id="l162" class='ln'>162</a></td><td>                <a id="162c17" class="tk">*</a>((<a id="162c20" class="tk">SPI_obj</a>-&gt;<a id="162c29" class="tk">spi_base_address</a>) <a id="162c47" class="tk">+</a> <a id="162c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="162c68" class="tk">|=</a> (<a id="162c72" class="tk">Uint16</a>)((1 <a id="162c83" class="tk">&amp;</a> <a id="162c85" class="tk">SPICCR_HS_MODE_BITS</a>) <a id="162c106" class="tk">&lt;&lt;</a> <a id="162c109" class="tk">SPICCR_HS_MODE_SHIFT</a>);</td></tr>
+<tr name="163" id="163">
+<td><a id="l163" class='ln'>163</a></td><td>                <a id="163c17" class="tk">*</a>((<a id="163c20" class="tk">SPI_obj</a>-&gt;<a id="163c29" class="tk">spi_base_address</a>) <a id="163c47" class="tk">+</a> <a id="163c49" class="tk">SPICTL_REG_OFFSET</a>) <a id="163c68" class="tk">|=</a> (<a id="163c72" class="tk">Uint16</a>)(((<a id="163c82" class="tk">~</a><a id="163c83" class="tk">MW_SPI_A_MODE</a>) <a id="163c98" class="tk">&amp;</a> <a id="163c100" class="tk">SPICTL_MASTER_SLAVE_BITS</a>) <a id="163c126" class="tk">&lt;&lt;</a> <a id="163c129" class="tk">SPICTL_MASTER_SLAVE_SHIFT</a>);</td></tr>
+<tr name="164" id="164">
+<td><a id="l164" class='ln'>164</a></td><td>                <a id="164c17" class="tk">*</a>((<a id="164c20" class="tk">SPI_obj</a>-&gt;<a id="164c29" class="tk">spi_base_address</a>) <a id="164c47" class="tk">+</a> <a id="164c49" class="tk">SPICTL_REG_OFFSET</a>) <a id="164c68" class="tk">|=</a> (<a id="164c72" class="tk">Uint16</a>)((<a id="164c81" class="tk">SPICTL_TALK_BITS</a>) <a id="164c99" class="tk">&lt;&lt;</a> <a id="164c102" class="tk">SPICTL_TALK_SHIFT</a>);</td></tr>
+<tr name="165" id="165">
+<td><a id="l165" class='ln'>165</a></td><td>                <a id="165c17" class="tk">*</a>((<a id="165c20" class="tk">SPI_obj</a>-&gt;<a id="165c29" class="tk">spi_base_address</a>) <a id="165c47" class="tk">+</a> <a id="165c49" class="tk">SPIBRR_REG_OFFSET</a>) <a id="165c68" class="tk">|=</a> (<a id="165c72" class="tk">Uint16</a>)(((<a id="165c82" class="tk">Uint16</a>)<a id="165c89" class="tk">MW_SPI_A_BAUDRATEFACTOR</a> <a id="165c113" class="tk">&amp;</a> <a id="165c115" class="tk">SPIBRR_SPI_BIT_RATE_BITS</a>) <a id="165c141" class="tk">&lt;&lt;</a> <a id="165c144" class="tk">SPIBRR_SPI_BIT_RATE_SHIFT</a>);</td></tr>
+<tr name="166" id="166">
+<td><a id="l166" class='ln'>166</a></td><td><span class="pp">#ifdef</span> <a id="166c8" class="tk">MW_SPI_A_ENABLETHREEWIRE</a></td></tr>
+<tr name="167" id="167">
+<td><a id="l167" class='ln'>167</a></td><td>                <a id="167c17" class="tk">*</a>((<a id="167c20" class="tk">SPI_obj</a>-&gt;<a id="167c29" class="tk">spi_base_address</a>) <a id="167c47" class="tk">+</a> <a id="167c49" class="tk">SPIPRI_REG_OFFSET</a>) <a id="167c68" class="tk">|=</a> (<a id="167c72" class="tk">Uint16</a>)((<a id="167c81" class="tk">MW_SPI_A_ENABLETHREEWIRE</a> <a id="167c106" class="tk">&amp;</a> <a id="167c108" class="tk">SPIPRI_TRIWIRE_BITS</a>) <a id="167c129" class="tk">&lt;&lt;</a> <a id="167c132" class="tk">SPIPRI_TRIWIRE_SHIFT</a>);</td></tr>
+<tr name="168" id="168">
+<td><a id="l168" class='ln'>168</a></td><td><span class="pp">#endif</span> <span class="ct">// End of MW_SPI_A_ENABLETHREEWIRE</span></td></tr>
+<tr name="169" id="169">
+<td><a id="l169" class='ln'>169</a></td><td>                <a id="169c17" class="tk">*</a>((<a id="169c20" class="tk">SPI_obj</a>-&gt;<a id="169c29" class="tk">spi_base_address</a>) <a id="169c47" class="tk">+</a> <a id="169c49" class="tk">SPIPRI_REG_OFFSET</a>) <a id="169c68" class="tk">|=</a> (<a id="169c72" class="tk">Uint16</a>)((<a id="169c81" class="tk">priority</a> <a id="169c90" class="tk">&amp;</a> <a id="169c92" class="tk">SPIPRI_SOFT_FREE_BITS</a>) <a id="169c115" class="tk">&lt;&lt;</a> <a id="169c118" class="tk">SPIPRI_SOFT_FREE_SHIFT</a>);</td></tr>
+<tr name="170" id="170">
+<td><a id="l170" class='ln'>170</a></td><td>                <a id="170c17" class="tk">*</a>((<a id="170c20" class="tk">SPI_obj</a>-&gt;<a id="170c29" class="tk">spi_base_address</a>) <a id="170c47" class="tk">+</a> <a id="170c49" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="170c69" class="tk">|=</a> ((<a id="170c74" class="tk">SPIFFTX_SPIFFENA_BITS</a>) <a id="170c97" class="tk">&lt;&lt;</a> <a id="170c100" class="tk">SPIFFTX_SPIFFENA_SHIFT</a>);</td></tr>
+<tr name="171" id="171">
+<td><a id="l171" class='ln'>171</a></td><td>                <a id="171c17" class="tk">*</a>((<a id="171c20" class="tk">SPI_obj</a>-&gt;<a id="171c29" class="tk">spi_base_address</a>) <a id="171c47" class="tk">+</a> <a id="171c49" class="tk">SPIFFCT_REG_OFFSET</a>) <a id="171c69" class="tk">|=</a> ((<a id="171c74" class="tk">MW_SPI_A_FIFOTRANSMITDELAY</a> <a id="171c101" class="tk">&amp;</a> <a id="171c103" class="tk">SPIFFCT_TXDLY_BITS</a>) <a id="171c123" class="tk">&lt;&lt;</a> <a id="171c126" class="tk">SPIFFCT_TXDLY_SHIFT</a>);</td></tr>
+<tr name="172" id="172">
+<td><a id="l172" class='ln'>172</a></td><td></td></tr>
+<tr name="173" id="173">
+<td><a id="l173" class='ln'>173</a></td><td>                <span class="ct">/* Set the TX Interrupt FIFO level only at the init. Enable the FIFO interrupt only after TX buffer is full */</span></td></tr>
+<tr name="174" id="174">
+<td><a id="l174" class='ln'>174</a></td><td>                <a id="174c17" class="tk">*</a>((<a id="174c20" class="tk">SPI_obj</a>-&gt;<a id="174c29" class="tk">spi_base_address</a>) <a id="174c47" class="tk">+</a> <a id="174c49" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="174c69" class="tk">|=</a> ((<a id="174c74" class="tk">MW_SPI_A_FIFOINTERRUPTLEVEL_TX</a> <a id="174c105" class="tk">&amp;</a> <a id="174c107" class="tk">SPIFFTX_TXFFIL_BITS</a>) <a id="174c128" class="tk">&lt;&lt;</a> <a id="174c131" class="tk">SPIFFTX_TXFFIL_SHIFT</a>);</td></tr>
+<tr name="175" id="175">
+<td><a id="l175" class='ln'>175</a></td><td></td></tr>
+<tr name="176" id="176">
+<td><a id="l176" class='ln'>176</a></td><td>                <a id="176c17" class="tk">*</a>((<a id="176c20" class="tk">SPI_obj</a>-&gt;<a id="176c29" class="tk">spi_base_address</a>) <a id="176c47" class="tk">+</a> <a id="176c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="176c69" class="tk">&amp;=</a> (<a id="176c73" class="tk">~</a>(<a id="176c75" class="tk">SPIFFRX_RXFFIL_BITS</a> <a id="176c95" class="tk">&lt;&lt;</a> <a id="176c98" class="tk">SPIFFRX_RXFFIL_SHIFT</a>));</td></tr>
+<tr name="177" id="177">
+<td><a id="l177" class='ln'>177</a></td><td>                <a id="177c17" class="tk">*</a>((<a id="177c20" class="tk">SPI_obj</a>-&gt;<a id="177c29" class="tk">spi_base_address</a>) <a id="177c47" class="tk">+</a> <a id="177c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="177c69" class="tk">|=</a> ((<a id="177c74" class="tk">MW_SPI_A_FIFOINTERRUPTLEVEL_RX</a> <a id="177c105" class="tk">&amp;</a> <a id="177c107" class="tk">SPIFFRX_RXFFIL_BITS</a>) <a id="177c128" class="tk">&lt;&lt;</a> <a id="177c131" class="tk">SPIFFRX_RXFFIL_SHIFT</a>);</td></tr>
+<tr name="178" id="178">
+<td><a id="l178" class='ln'>178</a></td><td>                <a id="178c17" class="tk">*</a>((<a id="178c20" class="tk">SPI_obj</a>-&gt;<a id="178c29" class="tk">spi_base_address</a>) <a id="178c47" class="tk">+</a> <a id="178c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="178c69" class="tk">|=</a> (<a id="178c73" class="tk">SPIFFRX_RXFFINTCLR_BITS</a> <a id="178c97" class="tk">&lt;&lt;</a> <a id="178c100" class="tk">SPIFFRX_RXFFINTCLR_SHIFT</a>);</td></tr>
+<tr name="179" id="179">
+<td><a id="l179" class='ln'>179</a></td><td>                <a id="179c17" class="tk">*</a>((<a id="179c20" class="tk">SPI_obj</a>-&gt;<a id="179c29" class="tk">spi_base_address</a>) <a id="179c47" class="tk">+</a> <a id="179c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="179c69" class="tk">|=</a> ((<a id="179c74" class="tk">MW_SPI_A_RXINTERRUPTENABLE</a> <a id="179c101" class="tk">&amp;</a> <a id="179c103" class="tk">SPIFFRX_RXFFIENA_BITS</a>) <a id="179c126" class="tk">&lt;&lt;</a> <a id="179c129" class="tk">SPIFFRX_RXFFIENA_SHIFT</a>);</td></tr>
+<tr name="180" id="180">
+<td><a id="l180" class='ln'>180</a></td><td></td></tr>
+<tr name="181" id="181">
+<td><a id="l181" class='ln'>181</a></td><td>                <a id="181c17" class="tk">*</a>((<a id="181c20" class="tk">SPI_obj</a>-&gt;<a id="181c29" class="tk">spi_base_address</a>) <a id="181c47" class="tk">+</a> <a id="181c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="181c68" class="tk">|=</a> (<a id="181c72" class="tk">Uint16</a>)(<a id="181c80" class="tk">SPICCR_SPISWRESET_BITS</a> <a id="181c103" class="tk">&lt;&lt;</a> <a id="181c106" class="tk">SPICCR_SPISWRESET_SHIFT</a>);</td></tr>
+<tr name="182" id="182">
+<td><a id="l182" class='ln'>182</a></td><td>                <a id="182c17" class="tk">SPI_oneTimeInit</a>[0] = 1;</td></tr>
+<tr name="183" id="183">
+<td><a id="l183" class='ln'>183</a></td><td>            <span class="br">}</span></td></tr>
+<tr name="184" id="184">
+<td><a id="l184" class='ln'>184</a></td><td><span class="pp">#else</span></td></tr>
+<tr name="185" id="185">
+<td><a id="l185" class='ln'>185</a></td><td>            <a id="185c13" class="tk">SPI_obj</a>-&gt;<a id="185c22" class="tk">spi_base_address</a> = (<a id="185c42" class="tk">SPI_REG_ADDRESS</a>)0;</td></tr>
+<tr name="186" id="186">
+<td><a id="l186" class='ln'>186</a></td><td>            <a id="186c13" class="tk">SPI_obj</a>-&gt;<a id="186c22" class="tk">spi_clk_mode</a> = 0;</td></tr>
+<tr name="187" id="187">
+<td><a id="l187" class='ln'>187</a></td><td>            <a id="187c13" class="tk">SPI_obj</a>-&gt;<a id="187c22" class="tk">charLength</a> = 0;</td></tr>
+<tr name="188" id="188">
+<td><a id="l188" class='ln'>188</a></td><td>            <a id="188c13" class="tk">SPI_obj</a>-&gt;<a id="188c22" class="tk">fifoLevel</a> = 0;</td></tr>
+<tr name="189" id="189">
+<td><a id="l189" class='ln'>189</a></td><td>            <a id="189c13" class="tk">SPI_obj</a>-&gt;<a id="189c22" class="tk">txInterrupt</a> = 0;</td></tr>
+<tr name="190" id="190">
+<td><a id="l190" class='ln'>190</a></td><td><span class="pp">#endif</span> <span class="ct">//End of MW_SPI_A</span></td></tr>
+<tr name="191" id="191">
+<td><a id="l191" class='ln'>191</a></td><td>        <span class="br">}</span></td></tr>
+<tr name="192" id="192">
+<td><a id="l192" class='ln'>192</a></td><td>        <span class="kw">break</span>;</td></tr>
+<tr name="193" id="193">
+<td><a id="l193" class='ln'>193</a></td><td>        </td></tr>
+<tr name="194" id="194">
+<td><a id="l194" class='ln'>194</a></td><td>        <span class="kw">case</span> 1<a id="194c15" class="tk">:</a> <span class="ct">//SPI Module B</span></td></tr>
+<tr name="195" id="195">
+<td><a id="l195" class='ln'>195</a></td><td>        <span class="br">{</span></td></tr>
+<tr name="196" id="196">
+<td><a id="l196" class='ln'>196</a></td><td><span class="pp">#ifdef</span> <a id="196c8" class="tk">MW_SPI_B</a></td></tr>
+<tr name="197" id="197">
+<td><a id="l197" class='ln'>197</a></td><td>            <span class="kw">if</span> (<a id="197c17" class="tk">SPI_oneTimeInit</a>[1] <a id="197c36" class="tk">==</a> 0)</td></tr>
+<tr name="198" id="198">
+<td><a id="l198" class='ln'>198</a></td><td>            <span class="br">{</span></td></tr>
+<tr name="199" id="199">
+<td><a id="l199" class='ln'>199</a></td><td>                <a id="199c17" class="tk">SPI_obj</a>-&gt;<a id="199c26" class="tk">spi_base_address</a> = (<a id="199c46" class="tk">SPI_REG_ADDRESS</a>)<a id="199c62" class="tk">&amp;</a><a id="199c63" class="tk">SpibRegs</a>;</td></tr>
+<tr name="200" id="200">
+<td><a id="l200" class='ln'>200</a></td><td>                <a id="200c17" class="tk">SPI_obj</a>-&gt;<a id="200c26" class="tk">spi_clk_mode</a> = 0;</td></tr>
+<tr name="201" id="201">
+<td><a id="l201" class='ln'>201</a></td><td>                <a id="201c17" class="tk">SPI_obj</a>-&gt;<a id="201c26" class="tk">charLength</a> = 0;</td></tr>
+<tr name="202" id="202">
+<td><a id="l202" class='ln'>202</a></td><td>                <a id="202c17" class="tk">SPI_obj</a>-&gt;<a id="202c26" class="tk">fifoLevel</a> = <a id="202c38" class="tk">MW_SPI_B_FIFO_LEVEL</a>;</td></tr>
+<tr name="203" id="203">
+<td><a id="l203" class='ln'>203</a></td><td>                <a id="203c17" class="tk">SPI_obj</a>-&gt;<a id="203c26" class="tk">txInterrupt</a> = <a id="203c40" class="tk">MW_SPI_B_TXINTERRUPTENABLE</a>;</td></tr>
+<tr name="204" id="204">
+<td><a id="l204" class='ln'>204</a></td><td>                <span class="kw">if</span> (<a id="204c21" class="tk">MW_SPI_B_SUSPENSIONMODE</a> <a id="204c45" class="tk">==</a> 0)</td></tr>
+<tr name="205" id="205">
+<td><a id="l205" class='ln'>205</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="206" id="206">
+<td><a id="l206" class='ln'>206</a></td><td>                    <a id="206c21" class="tk">priority</a> = 0;</td></tr>
+<tr name="207" id="207">
+<td><a id="l207" class='ln'>207</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="208" id="208">
+<td><a id="l208" class='ln'>208</a></td><td>                <span class="kw">else</span> <span class="kw">if</span> (<a id="208c26" class="tk">MW_SPI_B_SUSPENSIONMODE</a> <a id="208c50" class="tk">==</a> 1)</td></tr>
+<tr name="209" id="209">
+<td><a id="l209" class='ln'>209</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="210" id="210">
+<td><a id="l210" class='ln'>210</a></td><td>                    <a id="210c21" class="tk">priority</a> = 2;</td></tr>
+<tr name="211" id="211">
+<td><a id="l211" class='ln'>211</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="212" id="212">
+<td><a id="l212" class='ln'>212</a></td><td>                <span class="kw">else</span></td></tr>
+<tr name="213" id="213">
+<td><a id="l213" class='ln'>213</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="214" id="214">
+<td><a id="l214" class='ln'>214</a></td><td>                    <a id="214c21" class="tk">priority</a> = 1;</td></tr>
+<tr name="215" id="215">
+<td><a id="l215" class='ln'>215</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="216" id="216">
+<td><a id="l216" class='ln'>216</a></td><td>                <span class="ct">/*TRIWIRE - Master, SIMO / Slave, SOMI*/</span></td></tr>
+<tr name="217" id="217">
+<td><a id="l217" class='ln'>217</a></td><td><span class="pp">#ifdef</span> <a id="217c8" class="tk">MW_SPI_B_ENABLETHREEWIRE</a></td></tr>
+<tr name="218" id="218">
+<td><a id="l218" class='ln'>218</a></td><td>    <span class="pp">#if</span>  <a id="218c10" class="tk">MW_SPI_B_ENABLETHREEWIRE</a> <a id="218c35" class="tk">==</a> 1</td></tr>
+<tr name="219" id="219">
+<td><a id="l219" class='ln'>219</a></td><td>        <span class="pp">#if</span> <a id="219c13" class="tk">MW_SPI_B_MODE</a> <a id="219c27" class="tk">==</a> 0</td></tr>
+<tr name="220" id="220">
+<td><a id="l220" class='ln'>220</a></td><td>                <a id="220c17" class="tk">Set_GPIOPin</a>(<a id="220c29" class="tk">MW_SPI_B_PINVALUE_SIMO</a>, <a id="220c53" class="tk">GPIO_MUX_CPU1</a>, <a id="220c68" class="tk">MW_SPI_B_PINMUX_SIMO</a>, <a id="220c90" class="tk">GPIO_OUTPUT</a>, <a id="220c103" class="tk">GPIO_PULLUP</a><a id="220c114" class="tk">|</a><a id="220c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="221" id="221">
+<td><a id="l221" class='ln'>221</a></td><td>        <span class="pp">#else</span> <span class="ct">//MW_SPI_B_MODE 1</span></td></tr>
+<tr name="222" id="222">
+<td><a id="l222" class='ln'>222</a></td><td>               <a id="222c16" class="tk">Set_GPIOPin</a>(<a id="222c28" class="tk">MW_SPI_B_PINVALUE_SOMI</a>, <a id="222c52" class="tk">GPIO_MUX_CPU1</a>, <a id="222c67" class="tk">MW_SPI_B_PINMUX_SOMI</a>, <a id="222c89" class="tk">GPIO_INPUT</a>, <a id="222c101" class="tk">GPIO_PULLUP</a><a id="222c112" class="tk">|</a><a id="222c113" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="223" id="223">
+<td><a id="l223" class='ln'>223</a></td><td>        <span class="pp">#endif</span> <span class="ct">//MW_SPI_B_MODE</span></td></tr>
+<tr name="224" id="224">
+<td><a id="l224" class='ln'>224</a></td><td>    <span class="pp">#else</span> <span class="ct">// MW_SPI_B_ENABLETHREEWIRE 0</span></td></tr>
+<tr name="225" id="225">
+<td><a id="l225" class='ln'>225</a></td><td>        <span class="pp">#if</span> <a id="225c13" class="tk">MW_SPI_B_MODE</a> <a id="225c27" class="tk">==</a> 0</td></tr>
+<tr name="226" id="226">
+<td><a id="l226" class='ln'>226</a></td><td>                <a id="226c17" class="tk">Set_GPIOPin</a>(<a id="226c29" class="tk">MW_SPI_B_PINVALUE_SIMO</a>, <a id="226c53" class="tk">GPIO_MUX_CPU1</a>, <a id="226c68" class="tk">MW_SPI_B_PINMUX_SIMO</a>, <a id="226c90" class="tk">GPIO_OUTPUT</a>, <a id="226c103" class="tk">GPIO_PULLUP</a><a id="226c114" class="tk">|</a><a id="226c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="227" id="227">
+<td><a id="l227" class='ln'>227</a></td><td>                <a id="227c17" class="tk">Set_GPIOPin</a>(<a id="227c29" class="tk">MW_SPI_B_PINVALUE_SOMI</a>, <a id="227c53" class="tk">GPIO_MUX_CPU1</a>, <a id="227c68" class="tk">MW_SPI_B_PINMUX_SOMI</a>, <a id="227c90" class="tk">GPIO_INPUT</a>, <a id="227c102" class="tk">GPIO_PULLUP</a><a id="227c113" class="tk">|</a><a id="227c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="228" id="228">
+<td><a id="l228" class='ln'>228</a></td><td>        <span class="pp">#else</span> <span class="ct">//MW_SPI_B_MODE 1</span></td></tr>
+<tr name="229" id="229">
+<td><a id="l229" class='ln'>229</a></td><td>                <a id="229c17" class="tk">Set_GPIOPin</a>(<a id="229c29" class="tk">MW_SPI_B_PINVALUE_SIMO</a>, <a id="229c53" class="tk">GPIO_MUX_CPU1</a>, <a id="229c68" class="tk">MW_SPI_B_PINMUX_SIMO</a>, <a id="229c90" class="tk">GPIO_INPUT</a>, <a id="229c102" class="tk">GPIO_PULLUP</a><a id="229c113" class="tk">|</a><a id="229c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="230" id="230">
+<td><a id="l230" class='ln'>230</a></td><td>                <a id="230c17" class="tk">Set_GPIOPin</a>(<a id="230c29" class="tk">MW_SPI_B_PINVALUE_SOMI</a>, <a id="230c53" class="tk">GPIO_MUX_CPU1</a>, <a id="230c68" class="tk">MW_SPI_B_PINMUX_SOMI</a>, <a id="230c90" class="tk">GPIO_OUTPUT</a>, <a id="230c103" class="tk">GPIO_PULLUP</a><a id="230c114" class="tk">|</a><a id="230c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="231" id="231">
+<td><a id="l231" class='ln'>231</a></td><td>        <span class="pp">#endif</span> <span class="ct">//MW_SPI_B_MODE</span></td></tr>
+<tr name="232" id="232">
+<td><a id="l232" class='ln'>232</a></td><td>    <span class="pp">#endif</span></td></tr>
+<tr name="233" id="233">
+<td><a id="l233" class='ln'>233</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_B_ENABLETHREEWIRE not defined</span></td></tr>
+<tr name="234" id="234">
+<td><a id="l234" class='ln'>234</a></td><td>    <span class="pp">#if</span> <a id="234c9" class="tk">MW_SPI_B_MODE</a> <a id="234c23" class="tk">==</a> 0</td></tr>
+<tr name="235" id="235">
+<td><a id="l235" class='ln'>235</a></td><td>                <a id="235c17" class="tk">Set_GPIOPin</a>(<a id="235c29" class="tk">MW_SPI_B_PINVALUE_SIMO</a>, <a id="235c53" class="tk">GPIO_MUX_CPU1</a>, <a id="235c68" class="tk">MW_SPI_B_PINMUX_SIMO</a>, <a id="235c90" class="tk">GPIO_OUTPUT</a>, <a id="235c103" class="tk">GPIO_PULLUP</a><a id="235c114" class="tk">|</a><a id="235c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="236" id="236">
+<td><a id="l236" class='ln'>236</a></td><td>                <a id="236c17" class="tk">Set_GPIOPin</a>(<a id="236c29" class="tk">MW_SPI_B_PINVALUE_SOMI</a>, <a id="236c53" class="tk">GPIO_MUX_CPU1</a>, <a id="236c68" class="tk">MW_SPI_B_PINMUX_SOMI</a>, <a id="236c90" class="tk">GPIO_INPUT</a>, <a id="236c102" class="tk">GPIO_PULLUP</a><a id="236c113" class="tk">|</a><a id="236c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="237" id="237">
+<td><a id="l237" class='ln'>237</a></td><td>    <span class="pp">#else</span> <span class="ct">//MW_SPI_B_MODE 1</span></td></tr>
+<tr name="238" id="238">
+<td><a id="l238" class='ln'>238</a></td><td>                <a id="238c17" class="tk">Set_GPIOPin</a>(<a id="238c29" class="tk">MW_SPI_B_PINVALUE_SIMO</a>, <a id="238c53" class="tk">GPIO_MUX_CPU1</a>, <a id="238c68" class="tk">MW_SPI_B_PINMUX_SIMO</a>, <a id="238c90" class="tk">GPIO_INPUT</a>, <a id="238c102" class="tk">GPIO_PULLUP</a><a id="238c113" class="tk">|</a><a id="238c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="239" id="239">
+<td><a id="l239" class='ln'>239</a></td><td>                <a id="239c17" class="tk">Set_GPIOPin</a>(<a id="239c29" class="tk">MW_SPI_B_PINVALUE_SOMI</a>, <a id="239c53" class="tk">GPIO_MUX_CPU1</a>, <a id="239c68" class="tk">MW_SPI_B_PINMUX_SOMI</a>, <a id="239c90" class="tk">GPIO_OUTPUT</a>, <a id="239c103" class="tk">GPIO_PULLUP</a><a id="239c114" class="tk">|</a><a id="239c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="240" id="240">
+<td><a id="l240" class='ln'>240</a></td><td>    <span class="pp">#endif</span> <span class="ct">//MW_SPI_B_MODE</span></td></tr>
+<tr name="241" id="241">
+<td><a id="l241" class='ln'>241</a></td><td><span class="pp">#endif</span> <span class="ct">// End of MW_SPI_B_ENABLETHREEWIRE</span></td></tr>
+<tr name="242" id="242">
+<td><a id="l242" class='ln'>242</a></td><td>                </td></tr>
+<tr name="243" id="243">
+<td><a id="l243" class='ln'>243</a></td><td><span class="pp">#if</span> <a id="243c5" class="tk">MW_SPI_B_MODE</a> <a id="243c19" class="tk">==</a> 0</td></tr>
+<tr name="244" id="244">
+<td><a id="l244" class='ln'>244</a></td><td>                <a id="244c17" class="tk">Set_GPIOPin</a>(<a id="244c29" class="tk">MW_SPI_B_PINVALUE_CLK</a>, <a id="244c52" class="tk">GPIO_MUX_CPU1</a>, <a id="244c67" class="tk">MW_SPI_B_PINMUX_CLK</a>, <a id="244c88" class="tk">GPIO_OUTPUT</a>, <a id="244c101" class="tk">GPIO_PULLUP</a><a id="244c112" class="tk">|</a><a id="244c113" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="245" id="245">
+<td><a id="l245" class='ln'>245</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_B_MODE 1</span></td></tr>
+<tr name="246" id="246">
+<td><a id="l246" class='ln'>246</a></td><td>                <a id="246c17" class="tk">Set_GPIOPin</a>(<a id="246c29" class="tk">MW_SPI_B_PINVALUE_CLK</a>, <a id="246c52" class="tk">GPIO_MUX_CPU1</a>, <a id="246c67" class="tk">MW_SPI_B_PINMUX_CLK</a>, <a id="246c88" class="tk">GPIO_INPUT</a>, <a id="246c100" class="tk">GPIO_PULLUP</a><a id="246c111" class="tk">|</a><a id="246c112" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="247" id="247">
+<td><a id="l247" class='ln'>247</a></td><td><span class="pp">#endif</span> <span class="ct">//MW_SPI_B_MODE</span></td></tr>
+<tr name="248" id="248">
+<td><a id="l248" class='ln'>248</a></td><td></td></tr>
+<tr name="249" id="249">
+<td><a id="l249" class='ln'>249</a></td><td><span class="pp">#ifdef</span> <a id="249c8" class="tk">MW_SPISTE_SELECT_SPI_B</a></td></tr>
+<tr name="250" id="250">
+<td><a id="l250" class='ln'>250</a></td><td>                <span class="kw">if</span> (<a id="250c21" class="tk">MW_SPI_B_PINVALUE_STE</a> <a id="250c43" class="tk">&gt;=</a> 0)</td></tr>
+<tr name="251" id="251">
+<td><a id="l251" class='ln'>251</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="252" id="252">
+<td><a id="l252" class='ln'>252</a></td><td><span class="pp">#if</span> <a id="252c5" class="tk">MW_SPI_B_MODE</a> <a id="252c19" class="tk">==</a> 0</td></tr>
+<tr name="253" id="253">
+<td><a id="l253" class='ln'>253</a></td><td>                   <a id="253c20" class="tk">Set_GPIOPin</a>(<a id="253c32" class="tk">MW_SPI_B_PINVALUE_STE</a>, <a id="253c55" class="tk">GPIO_MUX_CPU1</a>, <a id="253c70" class="tk">MW_SPI_B_PINMUX_STE</a>, <a id="253c91" class="tk">GPIO_OUTPUT</a>, <a id="253c104" class="tk">GPIO_PULLUP</a><a id="253c115" class="tk">|</a><a id="253c116" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="254" id="254">
+<td><a id="l254" class='ln'>254</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_B_MODE 1</span></td></tr>
+<tr name="255" id="255">
+<td><a id="l255" class='ln'>255</a></td><td>                   <a id="255c20" class="tk">Set_GPIOPin</a>(<a id="255c32" class="tk">MW_SPI_B_PINVALUE_STE</a>, <a id="255c55" class="tk">GPIO_MUX_CPU1</a>, <a id="255c70" class="tk">MW_SPI_B_PINMUX_STE</a>, <a id="255c91" class="tk">GPIO_INPUT</a>, <a id="255c103" class="tk">GPIO_PULLUP</a><a id="255c114" class="tk">|</a><a id="255c115" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="256" id="256">
+<td><a id="l256" class='ln'>256</a></td><td><span class="pp">#endif</span> <span class="ct">//MW_SPI_B_MODE</span></td></tr>
+<tr name="257" id="257">
+<td><a id="l257" class='ln'>257</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="258" id="258">
+<td><a id="l258" class='ln'>258</a></td><td><span class="pp">#endif</span> <span class="ct">//End of MW_SPISTE_SELECT_SPI_B</span></td></tr>
+<tr name="259" id="259">
+<td><a id="l259" class='ln'>259</a></td><td>                </td></tr>
+<tr name="260" id="260">
+<td><a id="l260" class='ln'>260</a></td><td>                <a id="260c17" class="tk">*</a>((<a id="260c20" class="tk">SPI_obj</a>-&gt;<a id="260c29" class="tk">spi_base_address</a>) <a id="260c47" class="tk">+</a> <a id="260c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="260c68" class="tk">&amp;=</a> (<a id="260c72" class="tk">~</a>(<a id="260c74" class="tk">SPICCR_SPISWRESET_BITS</a> <a id="260c97" class="tk">&lt;&lt;</a> <a id="260c100" class="tk">SPICCR_SPISWRESET_SHIFT</a>));</td></tr>
+<tr name="261" id="261">
+<td><a id="l261" class='ln'>261</a></td><td>                <a id="261c17" class="tk">*</a>((<a id="261c20" class="tk">SPI_obj</a>-&gt;<a id="261c29" class="tk">spi_base_address</a>) <a id="261c47" class="tk">+</a> <a id="261c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="261c68" class="tk">|=</a> (<a id="261c72" class="tk">Uint16</a>)((<a id="261c81" class="tk">MW_SPI_B_ENABLELOOPBACK</a> <a id="261c105" class="tk">&amp;</a> <a id="261c107" class="tk">SPICCR_SPILBK_BITS</a>) <a id="261c127" class="tk">&lt;&lt;</a> <a id="261c130" class="tk">SPICCR_SPILBK_SHIFT</a>);</td></tr>
+<tr name="262" id="262">
+<td><a id="l262" class='ln'>262</a></td><td>                <a id="262c17" class="tk">*</a>((<a id="262c20" class="tk">SPI_obj</a>-&gt;<a id="262c29" class="tk">spi_base_address</a>) <a id="262c47" class="tk">+</a> <a id="262c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="262c68" class="tk">|=</a> (<a id="262c72" class="tk">Uint16</a>)((1 <a id="262c83" class="tk">&amp;</a> <a id="262c85" class="tk">SPICCR_HS_MODE_BITS</a>) <a id="262c106" class="tk">&lt;&lt;</a> <a id="262c109" class="tk">SPICCR_HS_MODE_SHIFT</a>);</td></tr>
+<tr name="263" id="263">
+<td><a id="l263" class='ln'>263</a></td><td>                <a id="263c17" class="tk">*</a>((<a id="263c20" class="tk">SPI_obj</a>-&gt;<a id="263c29" class="tk">spi_base_address</a>) <a id="263c47" class="tk">+</a> <a id="263c49" class="tk">SPICTL_REG_OFFSET</a>) <a id="263c68" class="tk">|=</a> (<a id="263c72" class="tk">Uint16</a>)(((<a id="263c82" class="tk">~</a><a id="263c83" class="tk">MW_SPI_B_MODE</a>) <a id="263c98" class="tk">&amp;</a> <a id="263c100" class="tk">SPICTL_MASTER_SLAVE_BITS</a>) <a id="263c126" class="tk">&lt;&lt;</a> <a id="263c129" class="tk">SPICTL_MASTER_SLAVE_SHIFT</a>);</td></tr>
+<tr name="264" id="264">
+<td><a id="l264" class='ln'>264</a></td><td>                <a id="264c17" class="tk">*</a>((<a id="264c20" class="tk">SPI_obj</a>-&gt;<a id="264c29" class="tk">spi_base_address</a>) <a id="264c47" class="tk">+</a> <a id="264c49" class="tk">SPICTL_REG_OFFSET</a>) <a id="264c68" class="tk">|=</a> (<a id="264c72" class="tk">Uint16</a>)((<a id="264c81" class="tk">SPICTL_TALK_BITS</a>) <a id="264c99" class="tk">&lt;&lt;</a> <a id="264c102" class="tk">SPICTL_TALK_SHIFT</a>);</td></tr>
+<tr name="265" id="265">
+<td><a id="l265" class='ln'>265</a></td><td>                <a id="265c17" class="tk">*</a>((<a id="265c20" class="tk">SPI_obj</a>-&gt;<a id="265c29" class="tk">spi_base_address</a>) <a id="265c47" class="tk">+</a> <a id="265c49" class="tk">SPIBRR_REG_OFFSET</a>) <a id="265c68" class="tk">|=</a> (<a id="265c72" class="tk">Uint16</a>)(((<a id="265c82" class="tk">Uint16</a>)<a id="265c89" class="tk">MW_SPI_B_BAUDRATEFACTOR</a> <a id="265c113" class="tk">&amp;</a> <a id="265c115" class="tk">SPIBRR_SPI_BIT_RATE_BITS</a>) <a id="265c141" class="tk">&lt;&lt;</a> <a id="265c144" class="tk">SPIBRR_SPI_BIT_RATE_SHIFT</a>);</td></tr>
+<tr name="266" id="266">
+<td><a id="l266" class='ln'>266</a></td><td><span class="pp">#ifdef</span> <a id="266c8" class="tk">MW_SPI_B_ENABLETHREEWIRE</a></td></tr>
+<tr name="267" id="267">
+<td><a id="l267" class='ln'>267</a></td><td>                <a id="267c17" class="tk">*</a>((<a id="267c20" class="tk">SPI_obj</a>-&gt;<a id="267c29" class="tk">spi_base_address</a>) <a id="267c47" class="tk">+</a> <a id="267c49" class="tk">SPIPRI_REG_OFFSET</a>) <a id="267c68" class="tk">|=</a> (<a id="267c72" class="tk">Uint16</a>)((<a id="267c81" class="tk">MW_SPI_B_ENABLETHREEWIRE</a> <a id="267c106" class="tk">&amp;</a> <a id="267c108" class="tk">SPIPRI_TRIWIRE_BITS</a>) <a id="267c129" class="tk">&lt;&lt;</a> <a id="267c132" class="tk">SPIPRI_TRIWIRE_SHIFT</a>);</td></tr>
+<tr name="268" id="268">
+<td><a id="l268" class='ln'>268</a></td><td><span class="pp">#endif</span> <span class="ct">// End of MW_SPI_B_ENABLETHREEWIRE</span></td></tr>
+<tr name="269" id="269">
+<td><a id="l269" class='ln'>269</a></td><td>                <a id="269c17" class="tk">*</a>((<a id="269c20" class="tk">SPI_obj</a>-&gt;<a id="269c29" class="tk">spi_base_address</a>) <a id="269c47" class="tk">+</a> <a id="269c49" class="tk">SPIPRI_REG_OFFSET</a>) <a id="269c68" class="tk">|=</a> (<a id="269c72" class="tk">Uint16</a>)((<a id="269c81" class="tk">priority</a> <a id="269c90" class="tk">&amp;</a> <a id="269c92" class="tk">SPIPRI_SOFT_FREE_BITS</a>) <a id="269c115" class="tk">&lt;&lt;</a> <a id="269c118" class="tk">SPIPRI_SOFT_FREE_SHIFT</a>);</td></tr>
+<tr name="270" id="270">
+<td><a id="l270" class='ln'>270</a></td><td>                <a id="270c17" class="tk">*</a>((<a id="270c20" class="tk">SPI_obj</a>-&gt;<a id="270c29" class="tk">spi_base_address</a>) <a id="270c47" class="tk">+</a> <a id="270c49" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="270c69" class="tk">|=</a> ((<a id="270c74" class="tk">SPIFFTX_SPIFFENA_BITS</a>) <a id="270c97" class="tk">&lt;&lt;</a> <a id="270c100" class="tk">SPIFFTX_SPIFFENA_SHIFT</a>);</td></tr>
+<tr name="271" id="271">
+<td><a id="l271" class='ln'>271</a></td><td>                <a id="271c17" class="tk">*</a>((<a id="271c20" class="tk">SPI_obj</a>-&gt;<a id="271c29" class="tk">spi_base_address</a>) <a id="271c47" class="tk">+</a> <a id="271c49" class="tk">SPIFFCT_REG_OFFSET</a>) <a id="271c69" class="tk">|=</a> ((<a id="271c74" class="tk">MW_SPI_B_FIFOTRANSMITDELAY</a> <a id="271c101" class="tk">&amp;</a> <a id="271c103" class="tk">SPIFFCT_TXDLY_BITS</a>) <a id="271c123" class="tk">&lt;&lt;</a> <a id="271c126" class="tk">SPIFFCT_TXDLY_SHIFT</a>);</td></tr>
+<tr name="272" id="272">
+<td><a id="l272" class='ln'>272</a></td><td></td></tr>
+<tr name="273" id="273">
+<td><a id="l273" class='ln'>273</a></td><td>                <span class="ct">/* Set the TX Interrupt FIFO level only at the init. Enable the FIFO interrupt only after TX buffer is full */</span></td></tr>
+<tr name="274" id="274">
+<td><a id="l274" class='ln'>274</a></td><td>                <a id="274c17" class="tk">*</a>((<a id="274c20" class="tk">SPI_obj</a>-&gt;<a id="274c29" class="tk">spi_base_address</a>) <a id="274c47" class="tk">+</a> <a id="274c49" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="274c69" class="tk">|=</a> ((<a id="274c74" class="tk">MW_SPI_B_FIFOINTERRUPTLEVEL_TX</a> <a id="274c105" class="tk">&amp;</a> <a id="274c107" class="tk">SPIFFTX_TXFFIL_BITS</a>) <a id="274c128" class="tk">&lt;&lt;</a> <a id="274c131" class="tk">SPIFFTX_TXFFIL_SHIFT</a>);</td></tr>
+<tr name="275" id="275">
+<td><a id="l275" class='ln'>275</a></td><td></td></tr>
+<tr name="276" id="276">
+<td><a id="l276" class='ln'>276</a></td><td>                <a id="276c17" class="tk">*</a>((<a id="276c20" class="tk">SPI_obj</a>-&gt;<a id="276c29" class="tk">spi_base_address</a>) <a id="276c47" class="tk">+</a> <a id="276c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="276c69" class="tk">&amp;=</a> (<a id="276c73" class="tk">~</a>(<a id="276c75" class="tk">SPIFFRX_RXFFIL_BITS</a> <a id="276c95" class="tk">&lt;&lt;</a> <a id="276c98" class="tk">SPIFFRX_RXFFIL_SHIFT</a>));</td></tr>
+<tr name="277" id="277">
+<td><a id="l277" class='ln'>277</a></td><td>                <a id="277c17" class="tk">*</a>((<a id="277c20" class="tk">SPI_obj</a>-&gt;<a id="277c29" class="tk">spi_base_address</a>) <a id="277c47" class="tk">+</a> <a id="277c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="277c69" class="tk">|=</a> ((<a id="277c74" class="tk">MW_SPI_B_FIFOINTERRUPTLEVEL_RX</a> <a id="277c105" class="tk">&amp;</a> <a id="277c107" class="tk">SPIFFRX_RXFFIL_BITS</a>) <a id="277c128" class="tk">&lt;&lt;</a> <a id="277c131" class="tk">SPIFFRX_RXFFIL_SHIFT</a>);</td></tr>
+<tr name="278" id="278">
+<td><a id="l278" class='ln'>278</a></td><td>                <a id="278c17" class="tk">*</a>((<a id="278c20" class="tk">SPI_obj</a>-&gt;<a id="278c29" class="tk">spi_base_address</a>) <a id="278c47" class="tk">+</a> <a id="278c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="278c69" class="tk">|=</a> (<a id="278c73" class="tk">SPIFFRX_RXFFINTCLR_BITS</a> <a id="278c97" class="tk">&lt;&lt;</a> <a id="278c100" class="tk">SPIFFRX_RXFFINTCLR_SHIFT</a>);</td></tr>
+<tr name="279" id="279">
+<td><a id="l279" class='ln'>279</a></td><td>                <a id="279c17" class="tk">*</a>((<a id="279c20" class="tk">SPI_obj</a>-&gt;<a id="279c29" class="tk">spi_base_address</a>) <a id="279c47" class="tk">+</a> <a id="279c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="279c69" class="tk">|=</a> ((<a id="279c74" class="tk">MW_SPI_B_RXINTERRUPTENABLE</a> <a id="279c101" class="tk">&amp;</a> <a id="279c103" class="tk">SPIFFRX_RXFFIENA_BITS</a>) <a id="279c126" class="tk">&lt;&lt;</a> <a id="279c129" class="tk">SPIFFRX_RXFFIENA_SHIFT</a>);</td></tr>
+<tr name="280" id="280">
+<td><a id="l280" class='ln'>280</a></td><td></td></tr>
+<tr name="281" id="281">
+<td><a id="l281" class='ln'>281</a></td><td>                <a id="281c17" class="tk">*</a>((<a id="281c20" class="tk">SPI_obj</a>-&gt;<a id="281c29" class="tk">spi_base_address</a>) <a id="281c47" class="tk">+</a> <a id="281c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="281c68" class="tk">|=</a> (<a id="281c72" class="tk">Uint16</a>)(<a id="281c80" class="tk">SPICCR_SPISWRESET_BITS</a> <a id="281c103" class="tk">&lt;&lt;</a> <a id="281c106" class="tk">SPICCR_SPISWRESET_SHIFT</a>);</td></tr>
+<tr name="282" id="282">
+<td><a id="l282" class='ln'>282</a></td><td>                <a id="282c17" class="tk">SPI_oneTimeInit</a>[1] = 1;</td></tr>
+<tr name="283" id="283">
+<td><a id="l283" class='ln'>283</a></td><td>            <span class="br">}</span></td></tr>
+<tr name="284" id="284">
+<td><a id="l284" class='ln'>284</a></td><td><span class="pp">#else</span></td></tr>
+<tr name="285" id="285">
+<td><a id="l285" class='ln'>285</a></td><td>            <a id="285c13" class="tk">SPI_obj</a>-&gt;<a id="285c22" class="tk">spi_base_address</a> = (<a id="285c42" class="tk">SPI_REG_ADDRESS</a>)0;</td></tr>
+<tr name="286" id="286">
+<td><a id="l286" class='ln'>286</a></td><td>            <a id="286c13" class="tk">SPI_obj</a>-&gt;<a id="286c22" class="tk">spi_clk_mode</a> = 0;</td></tr>
+<tr name="287" id="287">
+<td><a id="l287" class='ln'>287</a></td><td>            <a id="287c13" class="tk">SPI_obj</a>-&gt;<a id="287c22" class="tk">charLength</a> = 0;</td></tr>
+<tr name="288" id="288">
+<td><a id="l288" class='ln'>288</a></td><td>            <a id="288c13" class="tk">SPI_obj</a>-&gt;<a id="288c22" class="tk">fifoLevel</a> = 0;</td></tr>
+<tr name="289" id="289">
+<td><a id="l289" class='ln'>289</a></td><td>            <a id="289c13" class="tk">SPI_obj</a>-&gt;<a id="289c22" class="tk">txInterrupt</a> = 0;</td></tr>
+<tr name="290" id="290">
+<td><a id="l290" class='ln'>290</a></td><td><span class="pp">#endif</span> <span class="ct">// End of MW_SPI_B</span></td></tr>
+<tr name="291" id="291">
+<td><a id="l291" class='ln'>291</a></td><td>        <span class="br">}</span></td></tr>
+<tr name="292" id="292">
+<td><a id="l292" class='ln'>292</a></td><td>        <span class="kw">break</span>;</td></tr>
+<tr name="293" id="293">
+<td><a id="l293" class='ln'>293</a></td><td>        <span class="kw">case</span> 2<a id="293c15" class="tk">:</a> <span class="ct">//SPI Module C</span></td></tr>
+<tr name="294" id="294">
+<td><a id="l294" class='ln'>294</a></td><td>        <span class="br">{</span></td></tr>
+<tr name="295" id="295">
+<td><a id="l295" class='ln'>295</a></td><td><span class="pp">#ifdef</span> <a id="295c8" class="tk">MW_SPI_C</a></td></tr>
+<tr name="296" id="296">
+<td><a id="l296" class='ln'>296</a></td><td>            <span class="kw">if</span> (<a id="296c17" class="tk">SPI_oneTimeInit</a>[2] <a id="296c36" class="tk">==</a> 0)</td></tr>
+<tr name="297" id="297">
+<td><a id="l297" class='ln'>297</a></td><td>            <span class="br">{</span></td></tr>
+<tr name="298" id="298">
+<td><a id="l298" class='ln'>298</a></td><td>                <a id="298c17" class="tk">SPI_obj</a>-&gt;<a id="298c26" class="tk">spi_base_address</a> = (<a id="298c46" class="tk">SPI_REG_ADDRESS</a>)<a id="298c62" class="tk">&amp;</a><a id="298c63" class="tk">SpicRegs</a>;</td></tr>
+<tr name="299" id="299">
+<td><a id="l299" class='ln'>299</a></td><td>                <a id="299c17" class="tk">SPI_obj</a>-&gt;<a id="299c26" class="tk">spi_clk_mode</a> = 0;</td></tr>
+<tr name="300" id="300">
+<td><a id="l300" class='ln'>300</a></td><td>                <a id="300c17" class="tk">SPI_obj</a>-&gt;<a id="300c26" class="tk">charLength</a> = 0;</td></tr>
+<tr name="301" id="301">
+<td><a id="l301" class='ln'>301</a></td><td>                <a id="301c17" class="tk">SPI_obj</a>-&gt;<a id="301c26" class="tk">fifoLevel</a> = <a id="301c38" class="tk">MW_SPI_C_FIFO_LEVEL</a>;</td></tr>
+<tr name="302" id="302">
+<td><a id="l302" class='ln'>302</a></td><td>                <a id="302c17" class="tk">SPI_obj</a>-&gt;<a id="302c26" class="tk">txInterrupt</a> = <a id="302c40" class="tk">MW_SPI_C_TXINTERRUPTENABLE</a>;</td></tr>
+<tr name="303" id="303">
+<td><a id="l303" class='ln'>303</a></td><td>                <span class="kw">if</span> (<a id="303c21" class="tk">MW_SPI_C_SUSPENSIONMODE</a> <a id="303c45" class="tk">==</a> 0)</td></tr>
+<tr name="304" id="304">
+<td><a id="l304" class='ln'>304</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="305" id="305">
+<td><a id="l305" class='ln'>305</a></td><td>                    <a id="305c21" class="tk">priority</a> = 0;</td></tr>
+<tr name="306" id="306">
+<td><a id="l306" class='ln'>306</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="307" id="307">
+<td><a id="l307" class='ln'>307</a></td><td>                <span class="kw">else</span> <span class="kw">if</span> (<a id="307c26" class="tk">MW_SPI_C_SUSPENSIONMODE</a> <a id="307c50" class="tk">==</a> 1)</td></tr>
+<tr name="308" id="308">
+<td><a id="l308" class='ln'>308</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="309" id="309">
+<td><a id="l309" class='ln'>309</a></td><td>                    <a id="309c21" class="tk">priority</a> = 2;</td></tr>
+<tr name="310" id="310">
+<td><a id="l310" class='ln'>310</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="311" id="311">
+<td><a id="l311" class='ln'>311</a></td><td>                <span class="kw">else</span></td></tr>
+<tr name="312" id="312">
+<td><a id="l312" class='ln'>312</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="313" id="313">
+<td><a id="l313" class='ln'>313</a></td><td>                    <a id="313c21" class="tk">priority</a> = 1;</td></tr>
+<tr name="314" id="314">
+<td><a id="l314" class='ln'>314</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="315" id="315">
+<td><a id="l315" class='ln'>315</a></td><td>                <span class="ct">/*TRIWIRE - Master, SIMO / Slave, SOMI*/</span></td></tr>
+<tr name="316" id="316">
+<td><a id="l316" class='ln'>316</a></td><td><span class="pp">#ifdef</span> <a id="316c8" class="tk">MW_SPI_C_ENABLETHREEWIRE</a></td></tr>
+<tr name="317" id="317">
+<td><a id="l317" class='ln'>317</a></td><td>    <span class="pp">#if</span>  <a id="317c10" class="tk">MW_SPI_C_ENABLETHREEWIRE</a> <a id="317c35" class="tk">==</a> 1</td></tr>
+<tr name="318" id="318">
+<td><a id="l318" class='ln'>318</a></td><td>        <span class="pp">#if</span> <a id="318c13" class="tk">MW_SPI_C_MODE</a> <a id="318c27" class="tk">==</a> 0</td></tr>
+<tr name="319" id="319">
+<td><a id="l319" class='ln'>319</a></td><td>                <a id="319c17" class="tk">Set_GPIOPin</a>(<a id="319c29" class="tk">MW_SPI_C_PINVALUE_SIMO</a>, <a id="319c53" class="tk">GPIO_MUX_CPU1</a>, <a id="319c68" class="tk">MW_SPI_C_PINMUX_SIMO</a>, <a id="319c90" class="tk">GPIO_OUTPUT</a>, <a id="319c103" class="tk">GPIO_PULLUP</a><a id="319c114" class="tk">|</a><a id="319c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="320" id="320">
+<td><a id="l320" class='ln'>320</a></td><td>        <span class="pp">#else</span> <span class="ct">//MW_SPI_C_MODE 1</span></td></tr>
+<tr name="321" id="321">
+<td><a id="l321" class='ln'>321</a></td><td>               <a id="321c16" class="tk">Set_GPIOPin</a>(<a id="321c28" class="tk">MW_SPI_C_PINVALUE_SOMI</a>, <a id="321c52" class="tk">GPIO_MUX_CPU1</a>, <a id="321c67" class="tk">MW_SPI_C_PINMUX_SOMI</a>, <a id="321c89" class="tk">GPIO_INPUT</a>, <a id="321c101" class="tk">GPIO_PULLUP</a><a id="321c112" class="tk">|</a><a id="321c113" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="322" id="322">
+<td><a id="l322" class='ln'>322</a></td><td>        <span class="pp">#endif</span> <span class="ct">//MW_SPI_C_MODE</span></td></tr>
+<tr name="323" id="323">
+<td><a id="l323" class='ln'>323</a></td><td>    <span class="pp">#else</span> <span class="ct">// MW_SPI_C_ENABLETHREEWIRE 0</span></td></tr>
+<tr name="324" id="324">
+<td><a id="l324" class='ln'>324</a></td><td>        <span class="pp">#if</span> <a id="324c13" class="tk">MW_SPI_C_MODE</a> <a id="324c27" class="tk">==</a> 0</td></tr>
+<tr name="325" id="325">
+<td><a id="l325" class='ln'>325</a></td><td>                <a id="325c17" class="tk">Set_GPIOPin</a>(<a id="325c29" class="tk">MW_SPI_C_PINVALUE_SIMO</a>, <a id="325c53" class="tk">GPIO_MUX_CPU1</a>, <a id="325c68" class="tk">MW_SPI_C_PINMUX_SIMO</a>, <a id="325c90" class="tk">GPIO_OUTPUT</a>, <a id="325c103" class="tk">GPIO_PULLUP</a><a id="325c114" class="tk">|</a><a id="325c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="326" id="326">
+<td><a id="l326" class='ln'>326</a></td><td>                <a id="326c17" class="tk">Set_GPIOPin</a>(<a id="326c29" class="tk">MW_SPI_C_PINVALUE_SOMI</a>, <a id="326c53" class="tk">GPIO_MUX_CPU1</a>, <a id="326c68" class="tk">MW_SPI_C_PINMUX_SOMI</a>, <a id="326c90" class="tk">GPIO_INPUT</a>, <a id="326c102" class="tk">GPIO_PULLUP</a><a id="326c113" class="tk">|</a><a id="326c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="327" id="327">
+<td><a id="l327" class='ln'>327</a></td><td>        <span class="pp">#else</span> <span class="ct">//MW_SPI_C_MODE 1</span></td></tr>
+<tr name="328" id="328">
+<td><a id="l328" class='ln'>328</a></td><td>                <a id="328c17" class="tk">Set_GPIOPin</a>(<a id="328c29" class="tk">MW_SPI_C_PINVALUE_SIMO</a>, <a id="328c53" class="tk">GPIO_MUX_CPU1</a>, <a id="328c68" class="tk">MW_SPI_C_PINMUX_SIMO</a>, <a id="328c90" class="tk">GPIO_INPUT</a>, <a id="328c102" class="tk">GPIO_PULLUP</a><a id="328c113" class="tk">|</a><a id="328c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="329" id="329">
+<td><a id="l329" class='ln'>329</a></td><td>                <a id="329c17" class="tk">Set_GPIOPin</a>(<a id="329c29" class="tk">MW_SPI_C_PINVALUE_SOMI</a>, <a id="329c53" class="tk">GPIO_MUX_CPU1</a>, <a id="329c68" class="tk">MW_SPI_C_PINMUX_SOMI</a>, <a id="329c90" class="tk">GPIO_OUTPUT</a>, <a id="329c103" class="tk">GPIO_PULLUP</a><a id="329c114" class="tk">|</a><a id="329c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="330" id="330">
+<td><a id="l330" class='ln'>330</a></td><td>        <span class="pp">#endif</span> <span class="ct">//MW_SPI_C_MODE</span></td></tr>
+<tr name="331" id="331">
+<td><a id="l331" class='ln'>331</a></td><td>    <span class="pp">#endif</span></td></tr>
+<tr name="332" id="332">
+<td><a id="l332" class='ln'>332</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_C_ENABLETHREEWIRE not defined</span></td></tr>
+<tr name="333" id="333">
+<td><a id="l333" class='ln'>333</a></td><td>    <span class="pp">#if</span> <a id="333c9" class="tk">MW_SPI_C_MODE</a> <a id="333c23" class="tk">==</a> 0</td></tr>
+<tr name="334" id="334">
+<td><a id="l334" class='ln'>334</a></td><td>                <a id="334c17" class="tk">Set_GPIOPin</a>(<a id="334c29" class="tk">MW_SPI_C_PINVALUE_SIMO</a>, <a id="334c53" class="tk">GPIO_MUX_CPU1</a>, <a id="334c68" class="tk">MW_SPI_C_PINMUX_SIMO</a>, <a id="334c90" class="tk">GPIO_OUTPUT</a>, <a id="334c103" class="tk">GPIO_PULLUP</a><a id="334c114" class="tk">|</a><a id="334c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="335" id="335">
+<td><a id="l335" class='ln'>335</a></td><td>                <a id="335c17" class="tk">Set_GPIOPin</a>(<a id="335c29" class="tk">MW_SPI_C_PINVALUE_SOMI</a>, <a id="335c53" class="tk">GPIO_MUX_CPU1</a>, <a id="335c68" class="tk">MW_SPI_C_PINMUX_SOMI</a>, <a id="335c90" class="tk">GPIO_INPUT</a>, <a id="335c102" class="tk">GPIO_PULLUP</a><a id="335c113" class="tk">|</a><a id="335c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="336" id="336">
+<td><a id="l336" class='ln'>336</a></td><td>    <span class="pp">#else</span> <span class="ct">//MW_SPI_C_MODE 1</span></td></tr>
+<tr name="337" id="337">
+<td><a id="l337" class='ln'>337</a></td><td>                <a id="337c17" class="tk">Set_GPIOPin</a>(<a id="337c29" class="tk">MW_SPI_C_PINVALUE_SIMO</a>, <a id="337c53" class="tk">GPIO_MUX_CPU1</a>, <a id="337c68" class="tk">MW_SPI_C_PINMUX_SIMO</a>, <a id="337c90" class="tk">GPIO_INPUT</a>, <a id="337c102" class="tk">GPIO_PULLUP</a><a id="337c113" class="tk">|</a><a id="337c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="338" id="338">
+<td><a id="l338" class='ln'>338</a></td><td>                <a id="338c17" class="tk">Set_GPIOPin</a>(<a id="338c29" class="tk">MW_SPI_C_PINVALUE_SOMI</a>, <a id="338c53" class="tk">GPIO_MUX_CPU1</a>, <a id="338c68" class="tk">MW_SPI_C_PINMUX_SOMI</a>, <a id="338c90" class="tk">GPIO_OUTPUT</a>, <a id="338c103" class="tk">GPIO_PULLUP</a><a id="338c114" class="tk">|</a><a id="338c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="339" id="339">
+<td><a id="l339" class='ln'>339</a></td><td>    <span class="pp">#endif</span> <span class="ct">//MW_SPI_C_MODE</span></td></tr>
+<tr name="340" id="340">
+<td><a id="l340" class='ln'>340</a></td><td><span class="pp">#endif</span> <span class="ct">// End of MW_SPI_C_ENABLETHREEWIRE</span></td></tr>
+<tr name="341" id="341">
+<td><a id="l341" class='ln'>341</a></td><td>                </td></tr>
+<tr name="342" id="342">
+<td><a id="l342" class='ln'>342</a></td><td><span class="pp">#if</span> <a id="342c5" class="tk">MW_SPI_C_MODE</a> <a id="342c19" class="tk">==</a> 0</td></tr>
+<tr name="343" id="343">
+<td><a id="l343" class='ln'>343</a></td><td>                <a id="343c17" class="tk">Set_GPIOPin</a>(<a id="343c29" class="tk">MW_SPI_C_PINVALUE_CLK</a>, <a id="343c52" class="tk">GPIO_MUX_CPU1</a>, <a id="343c67" class="tk">MW_SPI_C_PINMUX_CLK</a>, <a id="343c88" class="tk">GPIO_OUTPUT</a>, <a id="343c101" class="tk">GPIO_PULLUP</a><a id="343c112" class="tk">|</a><a id="343c113" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="344" id="344">
+<td><a id="l344" class='ln'>344</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_C_MODE 1</span></td></tr>
+<tr name="345" id="345">
+<td><a id="l345" class='ln'>345</a></td><td>                <a id="345c17" class="tk">Set_GPIOPin</a>(<a id="345c29" class="tk">MW_SPI_C_PINVALUE_CLK</a>, <a id="345c52" class="tk">GPIO_MUX_CPU1</a>, <a id="345c67" class="tk">MW_SPI_C_PINMUX_CLK</a>, <a id="345c88" class="tk">GPIO_INPUT</a>, <a id="345c100" class="tk">GPIO_PULLUP</a><a id="345c111" class="tk">|</a><a id="345c112" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="346" id="346">
+<td><a id="l346" class='ln'>346</a></td><td><span class="pp">#endif</span> <span class="ct">//MW_SPI_C_MODE</span></td></tr>
+<tr name="347" id="347">
+<td><a id="l347" class='ln'>347</a></td><td></td></tr>
+<tr name="348" id="348">
+<td><a id="l348" class='ln'>348</a></td><td><span class="pp">#ifdef</span> <a id="348c8" class="tk">MW_SPISTE_SELECT_SPI_C</a></td></tr>
+<tr name="349" id="349">
+<td><a id="l349" class='ln'>349</a></td><td>                <span class="kw">if</span> (<a id="349c21" class="tk">MW_SPI_C_PINVALUE_STE</a> <a id="349c43" class="tk">&gt;=</a> 0)</td></tr>
+<tr name="350" id="350">
+<td><a id="l350" class='ln'>350</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="351" id="351">
+<td><a id="l351" class='ln'>351</a></td><td><span class="pp">#if</span> <a id="351c5" class="tk">MW_SPI_C_MODE</a> <a id="351c19" class="tk">==</a> 0</td></tr>
+<tr name="352" id="352">
+<td><a id="l352" class='ln'>352</a></td><td>                   <a id="352c20" class="tk">Set_GPIOPin</a>(<a id="352c32" class="tk">MW_SPI_C_PINVALUE_STE</a>, <a id="352c55" class="tk">GPIO_MUX_CPU1</a>, <a id="352c70" class="tk">MW_SPI_C_PINMUX_STE</a>, <a id="352c91" class="tk">GPIO_OUTPUT</a>, <a id="352c104" class="tk">GPIO_PULLUP</a><a id="352c115" class="tk">|</a><a id="352c116" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="353" id="353">
+<td><a id="l353" class='ln'>353</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_C_MODE 1</span></td></tr>
+<tr name="354" id="354">
+<td><a id="l354" class='ln'>354</a></td><td>                   <a id="354c20" class="tk">Set_GPIOPin</a>(<a id="354c32" class="tk">MW_SPI_C_PINVALUE_STE</a>, <a id="354c55" class="tk">GPIO_MUX_CPU1</a>, <a id="354c70" class="tk">MW_SPI_C_PINMUX_STE</a>, <a id="354c91" class="tk">GPIO_INPUT</a>, <a id="354c103" class="tk">GPIO_PULLUP</a><a id="354c114" class="tk">|</a><a id="354c115" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="355" id="355">
+<td><a id="l355" class='ln'>355</a></td><td><span class="pp">#endif</span> <span class="ct">//MW_SPI_C_MODE</span></td></tr>
+<tr name="356" id="356">
+<td><a id="l356" class='ln'>356</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="357" id="357">
+<td><a id="l357" class='ln'>357</a></td><td><span class="pp">#endif</span> <span class="ct">//End of MW_SPISTE_SELECT_SPI_C</span></td></tr>
+<tr name="358" id="358">
+<td><a id="l358" class='ln'>358</a></td><td>                </td></tr>
+<tr name="359" id="359">
+<td><a id="l359" class='ln'>359</a></td><td>                <a id="359c17" class="tk">*</a>((<a id="359c20" class="tk">SPI_obj</a>-&gt;<a id="359c29" class="tk">spi_base_address</a>) <a id="359c47" class="tk">+</a> <a id="359c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="359c68" class="tk">&amp;=</a> (<a id="359c72" class="tk">~</a>(<a id="359c74" class="tk">SPICCR_SPISWRESET_BITS</a> <a id="359c97" class="tk">&lt;&lt;</a> <a id="359c100" class="tk">SPICCR_SPISWRESET_SHIFT</a>));</td></tr>
+<tr name="360" id="360">
+<td><a id="l360" class='ln'>360</a></td><td>                <a id="360c17" class="tk">*</a>((<a id="360c20" class="tk">SPI_obj</a>-&gt;<a id="360c29" class="tk">spi_base_address</a>) <a id="360c47" class="tk">+</a> <a id="360c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="360c68" class="tk">|=</a> (<a id="360c72" class="tk">Uint16</a>)((<a id="360c81" class="tk">MW_SPI_C_ENABLELOOPBACK</a> <a id="360c105" class="tk">&amp;</a> <a id="360c107" class="tk">SPICCR_SPILBK_BITS</a>) <a id="360c127" class="tk">&lt;&lt;</a> <a id="360c130" class="tk">SPICCR_SPILBK_SHIFT</a>);</td></tr>
+<tr name="361" id="361">
+<td><a id="l361" class='ln'>361</a></td><td>                <a id="361c17" class="tk">*</a>((<a id="361c20" class="tk">SPI_obj</a>-&gt;<a id="361c29" class="tk">spi_base_address</a>) <a id="361c47" class="tk">+</a> <a id="361c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="361c68" class="tk">|=</a> (<a id="361c72" class="tk">Uint16</a>)((1 <a id="361c83" class="tk">&amp;</a> <a id="361c85" class="tk">SPICCR_HS_MODE_BITS</a>) <a id="361c106" class="tk">&lt;&lt;</a> <a id="361c109" class="tk">SPICCR_HS_MODE_SHIFT</a>);</td></tr>
+<tr name="362" id="362">
+<td><a id="l362" class='ln'>362</a></td><td>                <a id="362c17" class="tk">*</a>((<a id="362c20" class="tk">SPI_obj</a>-&gt;<a id="362c29" class="tk">spi_base_address</a>) <a id="362c47" class="tk">+</a> <a id="362c49" class="tk">SPICTL_REG_OFFSET</a>) <a id="362c68" class="tk">|=</a> (<a id="362c72" class="tk">Uint16</a>)(((<a id="362c82" class="tk">~</a><a id="362c83" class="tk">MW_SPI_C_MODE</a>) <a id="362c98" class="tk">&amp;</a> <a id="362c100" class="tk">SPICTL_MASTER_SLAVE_BITS</a>) <a id="362c126" class="tk">&lt;&lt;</a> <a id="362c129" class="tk">SPICTL_MASTER_SLAVE_SHIFT</a>);</td></tr>
+<tr name="363" id="363">
+<td><a id="l363" class='ln'>363</a></td><td>                <a id="363c17" class="tk">*</a>((<a id="363c20" class="tk">SPI_obj</a>-&gt;<a id="363c29" class="tk">spi_base_address</a>) <a id="363c47" class="tk">+</a> <a id="363c49" class="tk">SPICTL_REG_OFFSET</a>) <a id="363c68" class="tk">|=</a> (<a id="363c72" class="tk">Uint16</a>)((<a id="363c81" class="tk">SPICTL_TALK_BITS</a>) <a id="363c99" class="tk">&lt;&lt;</a> <a id="363c102" class="tk">SPICTL_TALK_SHIFT</a>);</td></tr>
+<tr name="364" id="364">
+<td><a id="l364" class='ln'>364</a></td><td>                <a id="364c17" class="tk">*</a>((<a id="364c20" class="tk">SPI_obj</a>-&gt;<a id="364c29" class="tk">spi_base_address</a>) <a id="364c47" class="tk">+</a> <a id="364c49" class="tk">SPIBRR_REG_OFFSET</a>) <a id="364c68" class="tk">|=</a> (<a id="364c72" class="tk">Uint16</a>)(((<a id="364c82" class="tk">Uint16</a>)<a id="364c89" class="tk">MW_SPI_C_BAUDRATEFACTOR</a> <a id="364c113" class="tk">&amp;</a> <a id="364c115" class="tk">SPIBRR_SPI_BIT_RATE_BITS</a>) <a id="364c141" class="tk">&lt;&lt;</a> <a id="364c144" class="tk">SPIBRR_SPI_BIT_RATE_SHIFT</a>);</td></tr>
+<tr name="365" id="365">
+<td><a id="l365" class='ln'>365</a></td><td><span class="pp">#ifdef</span> <a id="365c8" class="tk">MW_SPI_C_ENABLETHREEWIRE</a></td></tr>
+<tr name="366" id="366">
+<td><a id="l366" class='ln'>366</a></td><td>                <a id="366c17" class="tk">*</a>((<a id="366c20" class="tk">SPI_obj</a>-&gt;<a id="366c29" class="tk">spi_base_address</a>) <a id="366c47" class="tk">+</a> <a id="366c49" class="tk">SPIPRI_REG_OFFSET</a>) <a id="366c68" class="tk">|=</a> (<a id="366c72" class="tk">Uint16</a>)((<a id="366c81" class="tk">MW_SPI_C_ENABLETHREEWIRE</a> <a id="366c106" class="tk">&amp;</a> <a id="366c108" class="tk">SPIPRI_TRIWIRE_BITS</a>) <a id="366c129" class="tk">&lt;&lt;</a> <a id="366c132" class="tk">SPIPRI_TRIWIRE_SHIFT</a>);</td></tr>
+<tr name="367" id="367">
+<td><a id="l367" class='ln'>367</a></td><td><span class="pp">#endif</span> <span class="ct">// End of MW_SPI_C_ENABLETHREEWIRE</span></td></tr>
+<tr name="368" id="368">
+<td><a id="l368" class='ln'>368</a></td><td>                <a id="368c17" class="tk">*</a>((<a id="368c20" class="tk">SPI_obj</a>-&gt;<a id="368c29" class="tk">spi_base_address</a>) <a id="368c47" class="tk">+</a> <a id="368c49" class="tk">SPIPRI_REG_OFFSET</a>) <a id="368c68" class="tk">|=</a> (<a id="368c72" class="tk">Uint16</a>)((<a id="368c81" class="tk">priority</a> <a id="368c90" class="tk">&amp;</a> <a id="368c92" class="tk">SPIPRI_SOFT_FREE_BITS</a>) <a id="368c115" class="tk">&lt;&lt;</a> <a id="368c118" class="tk">SPIPRI_SOFT_FREE_SHIFT</a>);</td></tr>
+<tr name="369" id="369">
+<td><a id="l369" class='ln'>369</a></td><td>                <a id="369c17" class="tk">*</a>((<a id="369c20" class="tk">SPI_obj</a>-&gt;<a id="369c29" class="tk">spi_base_address</a>) <a id="369c47" class="tk">+</a> <a id="369c49" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="369c69" class="tk">|=</a> ((<a id="369c74" class="tk">SPIFFTX_SPIFFENA_BITS</a>) <a id="369c97" class="tk">&lt;&lt;</a> <a id="369c100" class="tk">SPIFFTX_SPIFFENA_SHIFT</a>);</td></tr>
+<tr name="370" id="370">
+<td><a id="l370" class='ln'>370</a></td><td>                <a id="370c17" class="tk">*</a>((<a id="370c20" class="tk">SPI_obj</a>-&gt;<a id="370c29" class="tk">spi_base_address</a>) <a id="370c47" class="tk">+</a> <a id="370c49" class="tk">SPIFFCT_REG_OFFSET</a>) <a id="370c69" class="tk">|=</a> ((<a id="370c74" class="tk">MW_SPI_C_FIFOTRANSMITDELAY</a> <a id="370c101" class="tk">&amp;</a> <a id="370c103" class="tk">SPIFFCT_TXDLY_BITS</a>) <a id="370c123" class="tk">&lt;&lt;</a> <a id="370c126" class="tk">SPIFFCT_TXDLY_SHIFT</a>);</td></tr>
+<tr name="371" id="371">
+<td><a id="l371" class='ln'>371</a></td><td></td></tr>
+<tr name="372" id="372">
+<td><a id="l372" class='ln'>372</a></td><td>                <span class="ct">/* Set the TX Interrupt FIFO level only at the init. Enable the FIFO interrupt only after TX buffer is full */</span></td></tr>
+<tr name="373" id="373">
+<td><a id="l373" class='ln'>373</a></td><td>                <a id="373c17" class="tk">*</a>((<a id="373c20" class="tk">SPI_obj</a>-&gt;<a id="373c29" class="tk">spi_base_address</a>) <a id="373c47" class="tk">+</a> <a id="373c49" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="373c69" class="tk">|=</a> ((<a id="373c74" class="tk">MW_SPI_C_FIFOINTERRUPTLEVEL_TX</a> <a id="373c105" class="tk">&amp;</a> <a id="373c107" class="tk">SPIFFTX_TXFFIL_BITS</a>) <a id="373c128" class="tk">&lt;&lt;</a> <a id="373c131" class="tk">SPIFFTX_TXFFIL_SHIFT</a>);</td></tr>
+<tr name="374" id="374">
+<td><a id="l374" class='ln'>374</a></td><td></td></tr>
+<tr name="375" id="375">
+<td><a id="l375" class='ln'>375</a></td><td>                <a id="375c17" class="tk">*</a>((<a id="375c20" class="tk">SPI_obj</a>-&gt;<a id="375c29" class="tk">spi_base_address</a>) <a id="375c47" class="tk">+</a> <a id="375c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="375c69" class="tk">&amp;=</a> (<a id="375c73" class="tk">~</a>(<a id="375c75" class="tk">SPIFFRX_RXFFIL_BITS</a> <a id="375c95" class="tk">&lt;&lt;</a> <a id="375c98" class="tk">SPIFFRX_RXFFIL_SHIFT</a>));</td></tr>
+<tr name="376" id="376">
+<td><a id="l376" class='ln'>376</a></td><td>                <a id="376c17" class="tk">*</a>((<a id="376c20" class="tk">SPI_obj</a>-&gt;<a id="376c29" class="tk">spi_base_address</a>) <a id="376c47" class="tk">+</a> <a id="376c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="376c69" class="tk">|=</a> ((<a id="376c74" class="tk">MW_SPI_C_FIFOINTERRUPTLEVEL_RX</a> <a id="376c105" class="tk">&amp;</a> <a id="376c107" class="tk">SPIFFRX_RXFFIL_BITS</a>) <a id="376c128" class="tk">&lt;&lt;</a> <a id="376c131" class="tk">SPIFFRX_RXFFIL_SHIFT</a>);</td></tr>
+<tr name="377" id="377">
+<td><a id="l377" class='ln'>377</a></td><td>                <a id="377c17" class="tk">*</a>((<a id="377c20" class="tk">SPI_obj</a>-&gt;<a id="377c29" class="tk">spi_base_address</a>) <a id="377c47" class="tk">+</a> <a id="377c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="377c69" class="tk">|=</a> (<a id="377c73" class="tk">SPIFFRX_RXFFINTCLR_BITS</a> <a id="377c97" class="tk">&lt;&lt;</a> <a id="377c100" class="tk">SPIFFRX_RXFFINTCLR_SHIFT</a>);</td></tr>
+<tr name="378" id="378">
+<td><a id="l378" class='ln'>378</a></td><td>                <a id="378c17" class="tk">*</a>((<a id="378c20" class="tk">SPI_obj</a>-&gt;<a id="378c29" class="tk">spi_base_address</a>) <a id="378c47" class="tk">+</a> <a id="378c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="378c69" class="tk">|=</a> ((<a id="378c74" class="tk">MW_SPI_C_RXINTERRUPTENABLE</a> <a id="378c101" class="tk">&amp;</a> <a id="378c103" class="tk">SPIFFRX_RXFFIENA_BITS</a>) <a id="378c126" class="tk">&lt;&lt;</a> <a id="378c129" class="tk">SPIFFRX_RXFFIENA_SHIFT</a>);</td></tr>
+<tr name="379" id="379">
+<td><a id="l379" class='ln'>379</a></td><td></td></tr>
+<tr name="380" id="380">
+<td><a id="l380" class='ln'>380</a></td><td>                <a id="380c17" class="tk">*</a>((<a id="380c20" class="tk">SPI_obj</a>-&gt;<a id="380c29" class="tk">spi_base_address</a>) <a id="380c47" class="tk">+</a> <a id="380c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="380c68" class="tk">|=</a> (<a id="380c72" class="tk">Uint16</a>)(<a id="380c80" class="tk">SPICCR_SPISWRESET_BITS</a> <a id="380c103" class="tk">&lt;&lt;</a> <a id="380c106" class="tk">SPICCR_SPISWRESET_SHIFT</a>);</td></tr>
+<tr name="381" id="381">
+<td><a id="l381" class='ln'>381</a></td><td>                <a id="381c17" class="tk">SPI_oneTimeInit</a>[2] = 1;</td></tr>
+<tr name="382" id="382">
+<td><a id="l382" class='ln'>382</a></td><td>            <span class="br">}</span></td></tr>
+<tr name="383" id="383">
+<td><a id="l383" class='ln'>383</a></td><td><span class="pp">#else</span></td></tr>
+<tr name="384" id="384">
+<td><a id="l384" class='ln'>384</a></td><td>            <a id="384c13" class="tk">SPI_obj</a>-&gt;<a id="384c22" class="tk">spi_base_address</a> = (<a id="384c42" class="tk">SPI_REG_ADDRESS</a>)0;</td></tr>
+<tr name="385" id="385">
+<td><a id="l385" class='ln'>385</a></td><td>            <a id="385c13" class="tk">SPI_obj</a>-&gt;<a id="385c22" class="tk">spi_clk_mode</a> = 0;</td></tr>
+<tr name="386" id="386">
+<td><a id="l386" class='ln'>386</a></td><td>            <a id="386c13" class="tk">SPI_obj</a>-&gt;<a id="386c22" class="tk">charLength</a> = 0;</td></tr>
+<tr name="387" id="387">
+<td><a id="l387" class='ln'>387</a></td><td>            <a id="387c13" class="tk">SPI_obj</a>-&gt;<a id="387c22" class="tk">fifoLevel</a> = 0;</td></tr>
+<tr name="388" id="388">
+<td><a id="l388" class='ln'>388</a></td><td>            <a id="388c13" class="tk">SPI_obj</a>-&gt;<a id="388c22" class="tk">txInterrupt</a> = 0;</td></tr>
+<tr name="389" id="389">
+<td><a id="l389" class='ln'>389</a></td><td><span class="pp">#endif</span> <span class="ct">// End of MW_SPI_C</span></td></tr>
+<tr name="390" id="390">
+<td><a id="l390" class='ln'>390</a></td><td>        <span class="br">}</span></td></tr>
+<tr name="391" id="391">
+<td><a id="l391" class='ln'>391</a></td><td>        <span class="kw">break</span>;</td></tr>
+<tr name="392" id="392">
+<td><a id="l392" class='ln'>392</a></td><td>        <span class="kw">case</span> 3<a id="392c15" class="tk">:</a> <span class="ct">//SPI Module D</span></td></tr>
+<tr name="393" id="393">
+<td><a id="l393" class='ln'>393</a></td><td>        <span class="br">{</span></td></tr>
+<tr name="394" id="394">
+<td><a id="l394" class='ln'>394</a></td><td><span class="pp">#ifdef</span> <a id="394c8" class="tk">MW_SPI_D</a></td></tr>
+<tr name="395" id="395">
+<td><a id="l395" class='ln'>395</a></td><td>            <span class="kw">if</span> (<a id="395c17" class="tk">SPI_oneTimeInit</a>[3] <a id="395c36" class="tk">==</a> 0)</td></tr>
+<tr name="396" id="396">
+<td><a id="l396" class='ln'>396</a></td><td>            <span class="br">{</span></td></tr>
+<tr name="397" id="397">
+<td><a id="l397" class='ln'>397</a></td><td>                <a id="397c17" class="tk">SPI_obj</a>-&gt;<a id="397c26" class="tk">spi_base_address</a> = (<a id="397c46" class="tk">SPI_REG_ADDRESS</a>)<a id="397c62" class="tk">&amp;</a><a id="397c63" class="tk">SpidRegs</a>;</td></tr>
+<tr name="398" id="398">
+<td><a id="l398" class='ln'>398</a></td><td>                <a id="398c17" class="tk">SPI_obj</a>-&gt;<a id="398c26" class="tk">spi_clk_mode</a> = 0;</td></tr>
+<tr name="399" id="399">
+<td><a id="l399" class='ln'>399</a></td><td>                <a id="399c17" class="tk">SPI_obj</a>-&gt;<a id="399c26" class="tk">charLength</a> = 0;</td></tr>
+<tr name="400" id="400">
+<td><a id="l400" class='ln'>400</a></td><td>                <a id="400c17" class="tk">SPI_obj</a>-&gt;<a id="400c26" class="tk">fifoLevel</a> = <a id="400c38" class="tk">MW_SPI_D_FIFO_LEVEL</a>;</td></tr>
+<tr name="401" id="401">
+<td><a id="l401" class='ln'>401</a></td><td>                <a id="401c17" class="tk">SPI_obj</a>-&gt;<a id="401c26" class="tk">txInterrupt</a> = <a id="401c40" class="tk">MW_SPI_D_TXINTERRUPTENABLE</a>;</td></tr>
+<tr name="402" id="402">
+<td><a id="l402" class='ln'>402</a></td><td></td></tr>
+<tr name="403" id="403">
+<td><a id="l403" class='ln'>403</a></td><td>                <span class="kw">if</span> (<a id="403c21" class="tk">MW_SPI_D_SUSPENSIONMODE</a> <a id="403c45" class="tk">==</a> 0)</td></tr>
+<tr name="404" id="404">
+<td><a id="l404" class='ln'>404</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="405" id="405">
+<td><a id="l405" class='ln'>405</a></td><td>                    <a id="405c21" class="tk">priority</a> = 0;</td></tr>
+<tr name="406" id="406">
+<td><a id="l406" class='ln'>406</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="407" id="407">
+<td><a id="l407" class='ln'>407</a></td><td>                <span class="kw">else</span> <span class="kw">if</span> (<a id="407c26" class="tk">MW_SPI_D_SUSPENSIONMODE</a> <a id="407c50" class="tk">==</a> 1)</td></tr>
+<tr name="408" id="408">
+<td><a id="l408" class='ln'>408</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="409" id="409">
+<td><a id="l409" class='ln'>409</a></td><td>                    <a id="409c21" class="tk">priority</a> = 2;</td></tr>
+<tr name="410" id="410">
+<td><a id="l410" class='ln'>410</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="411" id="411">
+<td><a id="l411" class='ln'>411</a></td><td>                <span class="kw">else</span></td></tr>
+<tr name="412" id="412">
+<td><a id="l412" class='ln'>412</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="413" id="413">
+<td><a id="l413" class='ln'>413</a></td><td>                    <a id="413c21" class="tk">priority</a> = 1;</td></tr>
+<tr name="414" id="414">
+<td><a id="l414" class='ln'>414</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="415" id="415">
+<td><a id="l415" class='ln'>415</a></td><td>                <span class="ct">/*TRIWIRE - Master, SIMO / Slave, SOMI*/</span></td></tr>
+<tr name="416" id="416">
+<td><a id="l416" class='ln'>416</a></td><td><span class="pp">#ifdef</span> <a id="416c8" class="tk">MW_SPI_D_ENABLETHREEWIRE</a></td></tr>
+<tr name="417" id="417">
+<td><a id="l417" class='ln'>417</a></td><td>    <span class="pp">#if</span>  <a id="417c10" class="tk">MW_SPI_D_ENABLETHREEWIRE</a> <a id="417c35" class="tk">==</a> 1</td></tr>
+<tr name="418" id="418">
+<td><a id="l418" class='ln'>418</a></td><td>        <span class="pp">#if</span> <a id="418c13" class="tk">MW_SPI_D_MODE</a> <a id="418c27" class="tk">==</a> 0</td></tr>
+<tr name="419" id="419">
+<td><a id="l419" class='ln'>419</a></td><td>                <a id="419c17" class="tk">Set_GPIOPin</a>(<a id="419c29" class="tk">MW_SPI_D_PINVALUE_SIMO</a>, <a id="419c53" class="tk">GPIO_MUX_CPU1</a>, <a id="419c68" class="tk">MW_SPI_D_PINMUX_SIMO</a>, <a id="419c90" class="tk">GPIO_OUTPUT</a>, <a id="419c103" class="tk">GPIO_PULLUP</a><a id="419c114" class="tk">|</a><a id="419c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="420" id="420">
+<td><a id="l420" class='ln'>420</a></td><td>        <span class="pp">#else</span> <span class="ct">//MW_SPI_D_MODE 1</span></td></tr>
+<tr name="421" id="421">
+<td><a id="l421" class='ln'>421</a></td><td>               <a id="421c16" class="tk">Set_GPIOPin</a>(<a id="421c28" class="tk">MW_SPI_D_PINVALUE_SOMI</a>, <a id="421c52" class="tk">GPIO_MUX_CPU1</a>, <a id="421c67" class="tk">MW_SPI_D_PINMUX_SOMI</a>, <a id="421c89" class="tk">GPIO_INPUT</a>, <a id="421c101" class="tk">GPIO_PULLUP</a><a id="421c112" class="tk">|</a><a id="421c113" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="422" id="422">
+<td><a id="l422" class='ln'>422</a></td><td>        <span class="pp">#endif</span> <span class="ct">//MW_SPI_D_MODE</span></td></tr>
+<tr name="423" id="423">
+<td><a id="l423" class='ln'>423</a></td><td>    <span class="pp">#else</span> <span class="ct">// MW_SPI_D_ENABLETHREEWIRE 0</span></td></tr>
+<tr name="424" id="424">
+<td><a id="l424" class='ln'>424</a></td><td>        <span class="pp">#if</span> <a id="424c13" class="tk">MW_SPI_D_MODE</a> <a id="424c27" class="tk">==</a> 0</td></tr>
+<tr name="425" id="425">
+<td><a id="l425" class='ln'>425</a></td><td>                <a id="425c17" class="tk">Set_GPIOPin</a>(<a id="425c29" class="tk">MW_SPI_D_PINVALUE_SIMO</a>, <a id="425c53" class="tk">GPIO_MUX_CPU1</a>, <a id="425c68" class="tk">MW_SPI_D_PINMUX_SIMO</a>, <a id="425c90" class="tk">GPIO_OUTPUT</a>, <a id="425c103" class="tk">GPIO_PULLUP</a><a id="425c114" class="tk">|</a><a id="425c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="426" id="426">
+<td><a id="l426" class='ln'>426</a></td><td>                <a id="426c17" class="tk">Set_GPIOPin</a>(<a id="426c29" class="tk">MW_SPI_D_PINVALUE_SOMI</a>, <a id="426c53" class="tk">GPIO_MUX_CPU1</a>, <a id="426c68" class="tk">MW_SPI_D_PINMUX_SOMI</a>, <a id="426c90" class="tk">GPIO_INPUT</a>, <a id="426c102" class="tk">GPIO_PULLUP</a><a id="426c113" class="tk">|</a><a id="426c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="427" id="427">
+<td><a id="l427" class='ln'>427</a></td><td>        <span class="pp">#else</span> <span class="ct">//MW_SPI_D_MODE 1</span></td></tr>
+<tr name="428" id="428">
+<td><a id="l428" class='ln'>428</a></td><td>                <a id="428c17" class="tk">Set_GPIOPin</a>(<a id="428c29" class="tk">MW_SPI_D_PINVALUE_SIMO</a>, <a id="428c53" class="tk">GPIO_MUX_CPU1</a>, <a id="428c68" class="tk">MW_SPI_D_PINMUX_SIMO</a>, <a id="428c90" class="tk">GPIO_INPUT</a>, <a id="428c102" class="tk">GPIO_PULLUP</a><a id="428c113" class="tk">|</a><a id="428c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="429" id="429">
+<td><a id="l429" class='ln'>429</a></td><td>                <a id="429c17" class="tk">Set_GPIOPin</a>(<a id="429c29" class="tk">MW_SPI_D_PINVALUE_SOMI</a>, <a id="429c53" class="tk">GPIO_MUX_CPU1</a>, <a id="429c68" class="tk">MW_SPI_D_PINMUX_SOMI</a>, <a id="429c90" class="tk">GPIO_OUTPUT</a>, <a id="429c103" class="tk">GPIO_PULLUP</a><a id="429c114" class="tk">|</a><a id="429c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="430" id="430">
+<td><a id="l430" class='ln'>430</a></td><td>        <span class="pp">#endif</span> <span class="ct">//MW_SPI_D_MODE</span></td></tr>
+<tr name="431" id="431">
+<td><a id="l431" class='ln'>431</a></td><td>    <span class="pp">#endif</span></td></tr>
+<tr name="432" id="432">
+<td><a id="l432" class='ln'>432</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_D_ENABLETHREEWIRE not defined</span></td></tr>
+<tr name="433" id="433">
+<td><a id="l433" class='ln'>433</a></td><td>    <span class="pp">#if</span> <a id="433c9" class="tk">MW_SPI_D_MODE</a> <a id="433c23" class="tk">==</a> 0</td></tr>
+<tr name="434" id="434">
+<td><a id="l434" class='ln'>434</a></td><td>                <a id="434c17" class="tk">Set_GPIOPin</a>(<a id="434c29" class="tk">MW_SPI_D_PINVALUE_SIMO</a>, <a id="434c53" class="tk">GPIO_MUX_CPU1</a>, <a id="434c68" class="tk">MW_SPI_D_PINMUX_SIMO</a>, <a id="434c90" class="tk">GPIO_OUTPUT</a>, <a id="434c103" class="tk">GPIO_PULLUP</a><a id="434c114" class="tk">|</a><a id="434c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="435" id="435">
+<td><a id="l435" class='ln'>435</a></td><td>                <a id="435c17" class="tk">Set_GPIOPin</a>(<a id="435c29" class="tk">MW_SPI_D_PINVALUE_SOMI</a>, <a id="435c53" class="tk">GPIO_MUX_CPU1</a>, <a id="435c68" class="tk">MW_SPI_D_PINMUX_SOMI</a>, <a id="435c90" class="tk">GPIO_INPUT</a>, <a id="435c102" class="tk">GPIO_PULLUP</a><a id="435c113" class="tk">|</a><a id="435c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="436" id="436">
+<td><a id="l436" class='ln'>436</a></td><td>    <span class="pp">#else</span> <span class="ct">//MW_SPI_D_MODE 1</span></td></tr>
+<tr name="437" id="437">
+<td><a id="l437" class='ln'>437</a></td><td>                <a id="437c17" class="tk">Set_GPIOPin</a>(<a id="437c29" class="tk">MW_SPI_D_PINVALUE_SIMO</a>, <a id="437c53" class="tk">GPIO_MUX_CPU1</a>, <a id="437c68" class="tk">MW_SPI_D_PINMUX_SIMO</a>, <a id="437c90" class="tk">GPIO_INPUT</a>, <a id="437c102" class="tk">GPIO_PULLUP</a><a id="437c113" class="tk">|</a><a id="437c114" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="438" id="438">
+<td><a id="l438" class='ln'>438</a></td><td>                <a id="438c17" class="tk">Set_GPIOPin</a>(<a id="438c29" class="tk">MW_SPI_D_PINVALUE_SOMI</a>, <a id="438c53" class="tk">GPIO_MUX_CPU1</a>, <a id="438c68" class="tk">MW_SPI_D_PINMUX_SOMI</a>, <a id="438c90" class="tk">GPIO_OUTPUT</a>, <a id="438c103" class="tk">GPIO_PULLUP</a><a id="438c114" class="tk">|</a><a id="438c115" class="tk">GPIO_ASYNC</a>);</td></tr>
+<tr name="439" id="439">
+<td><a id="l439" class='ln'>439</a></td><td>    <span class="pp">#endif</span> <span class="ct">//MW_SPI_D_MODE</span></td></tr>
+<tr name="440" id="440">
+<td><a id="l440" class='ln'>440</a></td><td><span class="pp">#endif</span> <span class="ct">// End of MW_SPI_D_ENABLETHREEWIRE</span></td></tr>
+<tr name="441" id="441">
+<td><a id="l441" class='ln'>441</a></td><td>                </td></tr>
+<tr name="442" id="442">
+<td><a id="l442" class='ln'>442</a></td><td><span class="pp">#if</span> <a id="442c5" class="tk">MW_SPI_D_MODE</a> <a id="442c19" class="tk">==</a> 0</td></tr>
+<tr name="443" id="443">
+<td><a id="l443" class='ln'>443</a></td><td>                <a id="443c17" class="tk">Set_GPIOPin</a>(<a id="443c29" class="tk">MW_SPI_D_PINVALUE_CLK</a>, <a id="443c52" class="tk">GPIO_MUX_CPU1</a>, <a id="443c67" class="tk">MW_SPI_D_PINMUX_CLK</a>, <a id="443c88" class="tk">GPIO_OUTPUT</a>, <a id="443c101" class="tk">GPIO_PULLUP</a><a id="443c112" class="tk">|</a><a id="443c113" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="444" id="444">
+<td><a id="l444" class='ln'>444</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_D_MODE 1</span></td></tr>
+<tr name="445" id="445">
+<td><a id="l445" class='ln'>445</a></td><td>                <a id="445c17" class="tk">Set_GPIOPin</a>(<a id="445c29" class="tk">MW_SPI_D_PINVALUE_CLK</a>, <a id="445c52" class="tk">GPIO_MUX_CPU1</a>, <a id="445c67" class="tk">MW_SPI_D_PINMUX_CLK</a>, <a id="445c88" class="tk">GPIO_INPUT</a>, <a id="445c100" class="tk">GPIO_PULLUP</a><a id="445c111" class="tk">|</a><a id="445c112" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="446" id="446">
+<td><a id="l446" class='ln'>446</a></td><td><span class="pp">#endif</span> <span class="ct">//MW_SPI_D_MODE</span></td></tr>
+<tr name="447" id="447">
+<td><a id="l447" class='ln'>447</a></td><td></td></tr>
+<tr name="448" id="448">
+<td><a id="l448" class='ln'>448</a></td><td><span class="pp">#ifdef</span> <a id="448c8" class="tk">MW_SPISTE_SELECT_SPI_D</a></td></tr>
+<tr name="449" id="449">
+<td><a id="l449" class='ln'>449</a></td><td>                <span class="kw">if</span> (<a id="449c21" class="tk">MW_SPI_D_PINVALUE_STE</a> <a id="449c43" class="tk">&gt;=</a> 0)</td></tr>
+<tr name="450" id="450">
+<td><a id="l450" class='ln'>450</a></td><td>                <span class="br">{</span></td></tr>
+<tr name="451" id="451">
+<td><a id="l451" class='ln'>451</a></td><td><span class="pp">#if</span> <a id="451c5" class="tk">MW_SPI_D_MODE</a> <a id="451c19" class="tk">==</a> 0</td></tr>
+<tr name="452" id="452">
+<td><a id="l452" class='ln'>452</a></td><td>                   <a id="452c20" class="tk">Set_GPIOPin</a>(<a id="452c32" class="tk">MW_SPI_D_PINVALUE_STE</a>, <a id="452c55" class="tk">GPIO_MUX_CPU1</a>, <a id="452c70" class="tk">MW_SPI_D_PINMUX_STE</a>, <a id="452c91" class="tk">GPIO_OUTPUT</a>, <a id="452c104" class="tk">GPIO_PULLUP</a><a id="452c115" class="tk">|</a><a id="452c116" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="453" id="453">
+<td><a id="l453" class='ln'>453</a></td><td><span class="pp">#else</span> <span class="ct">//MW_SPI_D_MODE 1</span></td></tr>
+<tr name="454" id="454">
+<td><a id="l454" class='ln'>454</a></td><td>                   <a id="454c20" class="tk">Set_GPIOPin</a>(<a id="454c32" class="tk">MW_SPI_D_PINVALUE_STE</a>, <a id="454c55" class="tk">GPIO_MUX_CPU1</a>, <a id="454c70" class="tk">MW_SPI_D_PINMUX_STE</a>, <a id="454c91" class="tk">GPIO_INPUT</a>, <a id="454c103" class="tk">GPIO_PULLUP</a><a id="454c114" class="tk">|</a><a id="454c115" class="tk">GPIO_ASYNC</a>); </td></tr>
+<tr name="455" id="455">
+<td><a id="l455" class='ln'>455</a></td><td><span class="pp">#endif</span> <span class="ct">//MW_SPI_D_MODE</span></td></tr>
+<tr name="456" id="456">
+<td><a id="l456" class='ln'>456</a></td><td>                <span class="br">}</span></td></tr>
+<tr name="457" id="457">
+<td><a id="l457" class='ln'>457</a></td><td><span class="pp">#endif</span> <span class="ct">//End of MW_SPISTE_SELECT_SPI_D</span></td></tr>
+<tr name="458" id="458">
+<td><a id="l458" class='ln'>458</a></td><td>                </td></tr>
+<tr name="459" id="459">
+<td><a id="l459" class='ln'>459</a></td><td>                <a id="459c17" class="tk">*</a>((<a id="459c20" class="tk">SPI_obj</a>-&gt;<a id="459c29" class="tk">spi_base_address</a>) <a id="459c47" class="tk">+</a> <a id="459c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="459c68" class="tk">&amp;=</a> (<a id="459c72" class="tk">~</a>(<a id="459c74" class="tk">SPICCR_SPISWRESET_BITS</a> <a id="459c97" class="tk">&lt;&lt;</a> <a id="459c100" class="tk">SPICCR_SPISWRESET_SHIFT</a>));</td></tr>
+<tr name="460" id="460">
+<td><a id="l460" class='ln'>460</a></td><td>                <a id="460c17" class="tk">*</a>((<a id="460c20" class="tk">SPI_obj</a>-&gt;<a id="460c29" class="tk">spi_base_address</a>) <a id="460c47" class="tk">+</a> <a id="460c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="460c68" class="tk">|=</a> (<a id="460c72" class="tk">Uint16</a>)((<a id="460c81" class="tk">MW_SPI_D_ENABLELOOPBACK</a> <a id="460c105" class="tk">&amp;</a> <a id="460c107" class="tk">SPICCR_SPILBK_BITS</a>) <a id="460c127" class="tk">&lt;&lt;</a> <a id="460c130" class="tk">SPICCR_SPILBK_SHIFT</a>);</td></tr>
+<tr name="461" id="461">
+<td><a id="l461" class='ln'>461</a></td><td>                <a id="461c17" class="tk">*</a>((<a id="461c20" class="tk">SPI_obj</a>-&gt;<a id="461c29" class="tk">spi_base_address</a>) <a id="461c47" class="tk">+</a> <a id="461c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="461c68" class="tk">|=</a> (<a id="461c72" class="tk">Uint16</a>)((1 <a id="461c83" class="tk">&amp;</a> <a id="461c85" class="tk">SPICCR_HS_MODE_BITS</a>) <a id="461c106" class="tk">&lt;&lt;</a> <a id="461c109" class="tk">SPICCR_HS_MODE_SHIFT</a>);</td></tr>
+<tr name="462" id="462">
+<td><a id="l462" class='ln'>462</a></td><td>                <a id="462c17" class="tk">*</a>((<a id="462c20" class="tk">SPI_obj</a>-&gt;<a id="462c29" class="tk">spi_base_address</a>) <a id="462c47" class="tk">+</a> <a id="462c49" class="tk">SPICTL_REG_OFFSET</a>) <a id="462c68" class="tk">|=</a> (<a id="462c72" class="tk">Uint16</a>)(((<a id="462c82" class="tk">~</a><a id="462c83" class="tk">MW_SPI_D_MODE</a>) <a id="462c98" class="tk">&amp;</a> <a id="462c100" class="tk">SPICTL_MASTER_SLAVE_BITS</a>) <a id="462c126" class="tk">&lt;&lt;</a> <a id="462c129" class="tk">SPICTL_MASTER_SLAVE_SHIFT</a>);</td></tr>
+<tr name="463" id="463">
+<td><a id="l463" class='ln'>463</a></td><td>                <a id="463c17" class="tk">*</a>((<a id="463c20" class="tk">SPI_obj</a>-&gt;<a id="463c29" class="tk">spi_base_address</a>) <a id="463c47" class="tk">+</a> <a id="463c49" class="tk">SPICTL_REG_OFFSET</a>) <a id="463c68" class="tk">|=</a> (<a id="463c72" class="tk">Uint16</a>)((<a id="463c81" class="tk">SPICTL_TALK_BITS</a>) <a id="463c99" class="tk">&lt;&lt;</a> <a id="463c102" class="tk">SPICTL_TALK_SHIFT</a>);</td></tr>
+<tr name="464" id="464">
+<td><a id="l464" class='ln'>464</a></td><td>                <a id="464c17" class="tk">*</a>((<a id="464c20" class="tk">SPI_obj</a>-&gt;<a id="464c29" class="tk">spi_base_address</a>) <a id="464c47" class="tk">+</a> <a id="464c49" class="tk">SPIBRR_REG_OFFSET</a>) <a id="464c68" class="tk">|=</a> (<a id="464c72" class="tk">Uint16</a>)(((<a id="464c82" class="tk">Uint16</a>)<a id="464c89" class="tk">MW_SPI_D_BAUDRATEFACTOR</a> <a id="464c113" class="tk">&amp;</a> <a id="464c115" class="tk">SPIBRR_SPI_BIT_RATE_BITS</a>) <a id="464c141" class="tk">&lt;&lt;</a> <a id="464c144" class="tk">SPIBRR_SPI_BIT_RATE_SHIFT</a>);</td></tr>
+<tr name="465" id="465">
+<td><a id="l465" class='ln'>465</a></td><td><span class="pp">#ifdef</span> <a id="465c8" class="tk">MW_SPI_D_ENABLETHREEWIRE</a></td></tr>
+<tr name="466" id="466">
+<td><a id="l466" class='ln'>466</a></td><td>                <a id="466c17" class="tk">*</a>((<a id="466c20" class="tk">SPI_obj</a>-&gt;<a id="466c29" class="tk">spi_base_address</a>) <a id="466c47" class="tk">+</a> <a id="466c49" class="tk">SPIPRI_REG_OFFSET</a>) <a id="466c68" class="tk">|=</a> (<a id="466c72" class="tk">Uint16</a>)((<a id="466c81" class="tk">MW_SPI_D_ENABLETHREEWIRE</a> <a id="466c106" class="tk">&amp;</a> <a id="466c108" class="tk">SPIPRI_TRIWIRE_BITS</a>) <a id="466c129" class="tk">&lt;&lt;</a> <a id="466c132" class="tk">SPIPRI_TRIWIRE_SHIFT</a>);</td></tr>
+<tr name="467" id="467">
+<td><a id="l467" class='ln'>467</a></td><td><span class="pp">#endif</span> <span class="ct">// End of MW_SPI_D_ENABLETHREEWIRE</span></td></tr>
+<tr name="468" id="468">
+<td><a id="l468" class='ln'>468</a></td><td>                <a id="468c17" class="tk">*</a>((<a id="468c20" class="tk">SPI_obj</a>-&gt;<a id="468c29" class="tk">spi_base_address</a>) <a id="468c47" class="tk">+</a> <a id="468c49" class="tk">SPIPRI_REG_OFFSET</a>) <a id="468c68" class="tk">|=</a> (<a id="468c72" class="tk">Uint16</a>)((<a id="468c81" class="tk">priority</a> <a id="468c90" class="tk">&amp;</a> <a id="468c92" class="tk">SPIPRI_SOFT_FREE_BITS</a>) <a id="468c115" class="tk">&lt;&lt;</a> <a id="468c118" class="tk">SPIPRI_SOFT_FREE_SHIFT</a>);</td></tr>
+<tr name="469" id="469">
+<td><a id="l469" class='ln'>469</a></td><td>                <a id="469c17" class="tk">*</a>((<a id="469c20" class="tk">SPI_obj</a>-&gt;<a id="469c29" class="tk">spi_base_address</a>) <a id="469c47" class="tk">+</a> <a id="469c49" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="469c69" class="tk">|=</a> ((<a id="469c74" class="tk">SPIFFTX_SPIFFENA_BITS</a>) <a id="469c97" class="tk">&lt;&lt;</a> <a id="469c100" class="tk">SPIFFTX_SPIFFENA_SHIFT</a>);</td></tr>
+<tr name="470" id="470">
+<td><a id="l470" class='ln'>470</a></td><td>                <a id="470c17" class="tk">*</a>((<a id="470c20" class="tk">SPI_obj</a>-&gt;<a id="470c29" class="tk">spi_base_address</a>) <a id="470c47" class="tk">+</a> <a id="470c49" class="tk">SPIFFCT_REG_OFFSET</a>) <a id="470c69" class="tk">|=</a> ((<a id="470c74" class="tk">MW_SPI_D_FIFOTRANSMITDELAY</a> <a id="470c101" class="tk">&amp;</a> <a id="470c103" class="tk">SPIFFCT_TXDLY_BITS</a>) <a id="470c123" class="tk">&lt;&lt;</a> <a id="470c126" class="tk">SPIFFCT_TXDLY_SHIFT</a>);</td></tr>
+<tr name="471" id="471">
+<td><a id="l471" class='ln'>471</a></td><td></td></tr>
+<tr name="472" id="472">
+<td><a id="l472" class='ln'>472</a></td><td>                <span class="ct">/* Set the TX Interrupt FIFO level only at the init. Enable the FIFO interrupt only after TX buffer is full */</span></td></tr>
+<tr name="473" id="473">
+<td><a id="l473" class='ln'>473</a></td><td>                <a id="473c17" class="tk">*</a>((<a id="473c20" class="tk">SPI_obj</a>-&gt;<a id="473c29" class="tk">spi_base_address</a>) <a id="473c47" class="tk">+</a> <a id="473c49" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="473c69" class="tk">|=</a> ((<a id="473c74" class="tk">MW_SPI_D_FIFOINTERRUPTLEVEL_TX</a> <a id="473c105" class="tk">&amp;</a> <a id="473c107" class="tk">SPIFFTX_TXFFIL_BITS</a>) <a id="473c128" class="tk">&lt;&lt;</a> <a id="473c131" class="tk">SPIFFTX_TXFFIL_SHIFT</a>);</td></tr>
+<tr name="474" id="474">
+<td><a id="l474" class='ln'>474</a></td><td></td></tr>
+<tr name="475" id="475">
+<td><a id="l475" class='ln'>475</a></td><td>                <a id="475c17" class="tk">*</a>((<a id="475c20" class="tk">SPI_obj</a>-&gt;<a id="475c29" class="tk">spi_base_address</a>) <a id="475c47" class="tk">+</a> <a id="475c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="475c69" class="tk">&amp;=</a> (<a id="475c73" class="tk">~</a>(<a id="475c75" class="tk">SPIFFRX_RXFFIL_BITS</a> <a id="475c95" class="tk">&lt;&lt;</a> <a id="475c98" class="tk">SPIFFRX_RXFFIL_SHIFT</a>));</td></tr>
+<tr name="476" id="476">
+<td><a id="l476" class='ln'>476</a></td><td>                <a id="476c17" class="tk">*</a>((<a id="476c20" class="tk">SPI_obj</a>-&gt;<a id="476c29" class="tk">spi_base_address</a>) <a id="476c47" class="tk">+</a> <a id="476c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="476c69" class="tk">|=</a> ((<a id="476c74" class="tk">MW_SPI_D_FIFOINTERRUPTLEVEL_RX</a> <a id="476c105" class="tk">&amp;</a> <a id="476c107" class="tk">SPIFFRX_RXFFIL_BITS</a>) <a id="476c128" class="tk">&lt;&lt;</a> <a id="476c131" class="tk">SPIFFRX_RXFFIL_SHIFT</a>);</td></tr>
+<tr name="477" id="477">
+<td><a id="l477" class='ln'>477</a></td><td>                <a id="477c17" class="tk">*</a>((<a id="477c20" class="tk">SPI_obj</a>-&gt;<a id="477c29" class="tk">spi_base_address</a>) <a id="477c47" class="tk">+</a> <a id="477c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="477c69" class="tk">|=</a> (<a id="477c73" class="tk">SPIFFRX_RXFFINTCLR_BITS</a> <a id="477c97" class="tk">&lt;&lt;</a> <a id="477c100" class="tk">SPIFFRX_RXFFINTCLR_SHIFT</a>);</td></tr>
+<tr name="478" id="478">
+<td><a id="l478" class='ln'>478</a></td><td>                <a id="478c17" class="tk">*</a>((<a id="478c20" class="tk">SPI_obj</a>-&gt;<a id="478c29" class="tk">spi_base_address</a>) <a id="478c47" class="tk">+</a> <a id="478c49" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="478c69" class="tk">|=</a> ((<a id="478c74" class="tk">MW_SPI_D_RXINTERRUPTENABLE</a> <a id="478c101" class="tk">&amp;</a> <a id="478c103" class="tk">SPIFFRX_RXFFIENA_BITS</a>) <a id="478c126" class="tk">&lt;&lt;</a> <a id="478c129" class="tk">SPIFFRX_RXFFIENA_SHIFT</a>);</td></tr>
+<tr name="479" id="479">
+<td><a id="l479" class='ln'>479</a></td><td></td></tr>
+<tr name="480" id="480">
+<td><a id="l480" class='ln'>480</a></td><td>                <a id="480c17" class="tk">*</a>((<a id="480c20" class="tk">SPI_obj</a>-&gt;<a id="480c29" class="tk">spi_base_address</a>) <a id="480c47" class="tk">+</a> <a id="480c49" class="tk">SPICCR_REG_OFFSET</a>) <a id="480c68" class="tk">|=</a> (<a id="480c72" class="tk">Uint16</a>)(<a id="480c80" class="tk">SPICCR_SPISWRESET_BITS</a> <a id="480c103" class="tk">&lt;&lt;</a> <a id="480c106" class="tk">SPICCR_SPISWRESET_SHIFT</a>);</td></tr>
+<tr name="481" id="481">
+<td><a id="l481" class='ln'>481</a></td><td>                <a id="481c17" class="tk">SPI_oneTimeInit</a>[3] = 1;</td></tr>
+<tr name="482" id="482">
+<td><a id="l482" class='ln'>482</a></td><td>            <span class="br">}</span></td></tr>
+<tr name="483" id="483">
+<td><a id="l483" class='ln'>483</a></td><td><span class="pp">#else</span></td></tr>
+<tr name="484" id="484">
+<td><a id="l484" class='ln'>484</a></td><td>            <a id="484c13" class="tk">SPI_obj</a>-&gt;<a id="484c22" class="tk">spi_base_address</a> = (<a id="484c42" class="tk">SPI_REG_ADDRESS</a>)0;</td></tr>
+<tr name="485" id="485">
+<td><a id="l485" class='ln'>485</a></td><td>            <a id="485c13" class="tk">SPI_obj</a>-&gt;<a id="485c22" class="tk">spi_clk_mode</a> = 0;</td></tr>
+<tr name="486" id="486">
+<td><a id="l486" class='ln'>486</a></td><td>            <a id="486c13" class="tk">SPI_obj</a>-&gt;<a id="486c22" class="tk">charLength</a> = 0;</td></tr>
+<tr name="487" id="487">
+<td><a id="l487" class='ln'>487</a></td><td>            <a id="487c13" class="tk">SPI_obj</a>-&gt;<a id="487c22" class="tk">fifoLevel</a> = 0;</td></tr>
+<tr name="488" id="488">
+<td><a id="l488" class='ln'>488</a></td><td>            <a id="488c13" class="tk">SPI_obj</a>-&gt;<a id="488c22" class="tk">txInterrupt</a> = 0;</td></tr>
+<tr name="489" id="489">
+<td><a id="l489" class='ln'>489</a></td><td><span class="pp">#endif</span> <span class="ct">//End of MW_SPI_D</span></td></tr>
+<tr name="490" id="490">
+<td><a id="l490" class='ln'>490</a></td><td>        <span class="br">}</span></td></tr>
+<tr name="491" id="491">
+<td><a id="l491" class='ln'>491</a></td><td>        <span class="kw">break</span>;</td></tr>
+<tr name="492" id="492">
+<td><a id="l492" class='ln'>492</a></td><td>        <span class="kw">default</span><a id="492c16" class="tk">:</a></td></tr>
+<tr name="493" id="493">
+<td><a id="l493" class='ln'>493</a></td><td>            <a id="493c13" class="tk">SPI_obj</a>-&gt;<a id="493c22" class="tk">spi_base_address</a> = (<a id="493c42" class="tk">SPI_REG_ADDRESS</a>)0;</td></tr>
+<tr name="494" id="494">
+<td><a id="l494" class='ln'>494</a></td><td>            <span class="kw">break</span>;</td></tr>
+<tr name="495" id="495">
+<td><a id="l495" class='ln'>495</a></td><td>    <span class="br">}</span></td></tr>
+<tr name="496" id="496">
+<td><a id="l496" class='ln'>496</a></td><td><span class="pp">#endif</span> <span class="ct">//End of MW_F281X</span></td></tr>
+<tr name="497" id="497">
+<td><a id="l497" class='ln'>497</a></td><td></td></tr>
+<tr name="498" id="498">
+<td><a id="l498" class='ln'>498</a></td><td>    <span class="kw">return</span> <a id="498c12" class="tk">&amp;</a><a id="498c13" class="tk">mySpi</a>[<a id="498c19" class="tk">SPIModule</a>];</td></tr>
+<tr name="499" id="499">
+<td><a id="l499" class='ln'>499</a></td><td><span class="br">}</span></td></tr>
+<tr name="500" id="500">
+<td><a id="l500" class='ln'>500</a></td><td></td></tr>
+<tr name="501" id="501">
+<td><a id="l501" class='ln'>501</a></td><td><span class="ct">/*Set the SPIMode: Clock polarity and clock phase*/</span></td></tr>
+<tr name="502" id="502">
+<td><a id="l502" class='ln'>502</a></td><td><span class="kw">void</span> <a id="502c6" class="tk">SPI_clockFormat</a>(<a id="502c22" class="tk">MW_SpiHandle</a> <a id="502c35" class="tk">SPI_obj</a>, <a id="502c44" class="tk">Uint16</a> <a id="502c51" class="tk">clockPolarity</a>, <a id="502c66" class="tk">Uint16</a> <a id="502c73" class="tk">clockPhase</a>)</td></tr>
+<tr name="503" id="503">
+<td><a id="l503" class='ln'>503</a></td><td><span class="br">{</span></td></tr>
+<tr name="504" id="504">
+<td><a id="l504" class='ln'>504</a></td><td>    <span class="kw">if</span>(<a id="504c8" class="tk">SPI_obj</a>-&gt;<a id="504c17" class="tk">spi_base_address</a> <a id="504c34" class="tk">!=</a> 0)</td></tr>
+<tr name="505" id="505">
+<td><a id="l505" class='ln'>505</a></td><td>    <span class="br">{</span></td></tr>
+<tr name="506" id="506">
+<td><a id="l506" class='ln'>506</a></td><td>        <a id="506c9" class="tk">*</a>((<a id="506c12" class="tk">SPI_obj</a>-&gt;<a id="506c21" class="tk">spi_base_address</a>) <a id="506c39" class="tk">+</a> <a id="506c41" class="tk">SPICCR_REG_OFFSET</a>) <a id="506c60" class="tk">&amp;=</a> (<a id="506c64" class="tk">~</a>(<a id="506c66" class="tk">SPICCR_CLKPOLARITY_BITS</a> <a id="506c90" class="tk">&lt;&lt;</a> <a id="506c93" class="tk">SPICCR_CLKPOLARITY_SHIFT</a>));</td></tr>
+<tr name="507" id="507">
+<td><a id="l507" class='ln'>507</a></td><td>        <a id="507c9" class="tk">*</a>((<a id="507c12" class="tk">SPI_obj</a>-&gt;<a id="507c21" class="tk">spi_base_address</a>) <a id="507c39" class="tk">+</a> <a id="507c41" class="tk">SPICTL_REG_OFFSET</a>) <a id="507c60" class="tk">&amp;=</a> (<a id="507c64" class="tk">~</a>(<a id="507c66" class="tk">SPICTL_CLK_PHASE_BITS</a> <a id="507c88" class="tk">&lt;&lt;</a> <a id="507c91" class="tk">SPICTL_CLK_PHASE_SHIFT</a>));</td></tr>
+<tr name="508" id="508">
+<td><a id="l508" class='ln'>508</a></td><td>        <a id="508c9" class="tk">*</a>((<a id="508c12" class="tk">SPI_obj</a>-&gt;<a id="508c21" class="tk">spi_base_address</a>) <a id="508c39" class="tk">+</a> <a id="508c41" class="tk">SPICCR_REG_OFFSET</a>) <a id="508c60" class="tk">|=</a> ((<a id="508c65" class="tk">clockPolarity</a> <a id="508c79" class="tk">&amp;</a> <a id="508c81" class="tk">SPICCR_CLKPOLARITY_BITS</a>) <a id="508c106" class="tk">&lt;&lt;</a> <a id="508c109" class="tk">SPICCR_CLKPOLARITY_SHIFT</a>);</td></tr>
+<tr name="509" id="509">
+<td><a id="l509" class='ln'>509</a></td><td>        <a id="509c9" class="tk">*</a>((<a id="509c12" class="tk">SPI_obj</a>-&gt;<a id="509c21" class="tk">spi_base_address</a>) <a id="509c39" class="tk">+</a> <a id="509c41" class="tk">SPICTL_REG_OFFSET</a>) <a id="509c60" class="tk">|=</a> ((<a id="509c65" class="tk">clockPhase</a> <a id="509c76" class="tk">&amp;</a> <a id="509c78" class="tk">SPICTL_CLK_PHASE_BITS</a>) <a id="509c101" class="tk">&lt;&lt;</a> <a id="509c104" class="tk">SPICTL_CLK_PHASE_SHIFT</a>);</td></tr>
+<tr name="510" id="510">
+<td><a id="l510" class='ln'>510</a></td><td>    <span class="br">}</span></td></tr>
+<tr name="511" id="511">
+<td><a id="l511" class='ln'>511</a></td><td><span class="br">}</span></td></tr>
+<tr name="512" id="512">
+<td><a id="l512" class='ln'>512</a></td><td></td></tr>
+<tr name="513" id="513">
+<td><a id="l513" class='ln'>513</a></td><td><span class="ct">/*Read the SPI status registers for read and write status*/</span></td></tr>
+<tr name="514" id="514">
+<td><a id="l514" class='ln'>514</a></td><td><a id="514c1" class="tk">Uint16</a> <a id="514c8" class="tk">SPI_status</a>(<a id="514c19" class="tk">MW_SpiHandle</a> <a id="514c32" class="tk">SPI_obj</a>, <a id="514c41" class="tk">SPI_statusVal</a> <a id="514c55" class="tk">type</a>)</td></tr>
+<tr name="515" id="515">
+<td><a id="l515" class='ln'>515</a></td><td><span class="br">{</span></td></tr>
+<tr name="516" id="516">
+<td><a id="l516" class='ln'>516</a></td><td>    <a id="516c5" class="tk">Uint16</a> <a id="516c12" class="tk">ret</a> = 0;</td></tr>
+<tr name="517" id="517">
+<td><a id="l517" class='ln'>517</a></td><td>    <span class="kw">if</span>(<a id="517c8" class="tk">SPI_obj</a>-&gt;<a id="517c17" class="tk">spi_base_address</a> <a id="517c34" class="tk">!=</a> 0)</td></tr>
+<tr name="518" id="518">
+<td><a id="l518" class='ln'>518</a></td><td>    <span class="br">{</span></td></tr>
+<tr name="519" id="519">
+<td><a id="l519" class='ln'>519</a></td><td>        <span class="kw">switch</span>(<a id="519c16" class="tk">type</a>)</td></tr>
+<tr name="520" id="520">
+<td><a id="l520" class='ln'>520</a></td><td>        <span class="br">{</span></td></tr>
+<tr name="521" id="521">
+<td><a id="l521" class='ln'>521</a></td><td>            <span class="kw">case</span> <a id="521c18" class="tk">SPI_OVERRUN_FLAG</a><a id="521c34" class="tk">:</a></td></tr>
+<tr name="522" id="522">
+<td><a id="l522" class='ln'>522</a></td><td>                <a id="522c17" class="tk">ret</a> = (<a id="522c24" class="tk">*</a>((<a id="522c27" class="tk">SPI_obj</a>-&gt;<a id="522c36" class="tk">spi_base_address</a>) <a id="522c54" class="tk">+</a> <a id="522c56" class="tk">SPISTS_REG_OFFSET</a>) <a id="522c75" class="tk">&gt;&gt;</a> <a id="522c78" class="tk">SPISTS_OVERRUN_FLAG_SHIFT</a>)<a id="522c104" class="tk">&amp;</a> <a id="522c106" class="tk">SPISTS_OVERRUN_FLAG_BITS</a>;</td></tr>
+<tr name="523" id="523">
+<td><a id="l523" class='ln'>523</a></td><td>                <span class="kw">break</span>;</td></tr>
+<tr name="524" id="524">
+<td><a id="l524" class='ln'>524</a></td><td>            <span class="kw">case</span> <a id="524c18" class="tk">SPI_INT_FLAG</a><a id="524c30" class="tk">:</a></td></tr>
+<tr name="525" id="525">
+<td><a id="l525" class='ln'>525</a></td><td>                <a id="525c17" class="tk">ret</a> = (<a id="525c24" class="tk">*</a>((<a id="525c27" class="tk">SPI_obj</a>-&gt;<a id="525c36" class="tk">spi_base_address</a>) <a id="525c54" class="tk">+</a> <a id="525c56" class="tk">SPISTS_REG_OFFSET</a>) <a id="525c75" class="tk">&gt;&gt;</a> <a id="525c78" class="tk">SPISTS_INT_FLAG_SHIFT</a>) <a id="525c101" class="tk">&amp;</a> <a id="525c103" class="tk">SPISTS_INT_FLAG_BITS</a>;</td></tr>
+<tr name="526" id="526">
+<td><a id="l526" class='ln'>526</a></td><td>                <span class="kw">break</span>;</td></tr>
+<tr name="527" id="527">
+<td><a id="l527" class='ln'>527</a></td><td>            <span class="kw">case</span> <a id="527c18" class="tk">SPI_BUFFULL_FLAG</a><a id="527c34" class="tk">:</a></td></tr>
+<tr name="528" id="528">
+<td><a id="l528" class='ln'>528</a></td><td>                <a id="528c17" class="tk">ret</a> = (<a id="528c24" class="tk">*</a>((<a id="528c27" class="tk">SPI_obj</a>-&gt;<a id="528c36" class="tk">spi_base_address</a>) <a id="528c54" class="tk">+</a> <a id="528c56" class="tk">SPISTS_REG_OFFSET</a>) <a id="528c75" class="tk">&gt;&gt;</a> <a id="528c78" class="tk">SPISTS_BUFFULL_FLAG_SHIFT</a>) <a id="528c105" class="tk">&amp;</a> <a id="528c107" class="tk">SPISTS_BUFFULL_FLAG_BITS</a>;</td></tr>
+<tr name="529" id="529">
+<td><a id="l529" class='ln'>529</a></td><td>                <span class="kw">break</span>;</td></tr>
+<tr name="530" id="530">
+<td><a id="l530" class='ln'>530</a></td><td>            <span class="kw">case</span> <a id="530c18" class="tk">SPI_TXFFST_FLAG</a><a id="530c33" class="tk">:</a></td></tr>
+<tr name="531" id="531">
+<td><a id="l531" class='ln'>531</a></td><td>                <a id="531c17" class="tk">ret</a> = (<a id="531c24" class="tk">*</a>((<a id="531c27" class="tk">SPI_obj</a>-&gt;<a id="531c36" class="tk">spi_base_address</a>) <a id="531c54" class="tk">+</a> <a id="531c56" class="tk">SPIFFTX_REG_OFFSET</a>) <a id="531c76" class="tk">&gt;&gt;</a> <a id="531c79" class="tk">SPIFFTX_TXFFST_SHIFT</a>) <a id="531c101" class="tk">&amp;</a> <a id="531c103" class="tk">SPIFFTX_TXFFST_BITS</a> ;</td></tr>
+<tr name="532" id="532">
+<td><a id="l532" class='ln'>532</a></td><td>                <span class="kw">break</span>;</td></tr>
+<tr name="533" id="533">
+<td><a id="l533" class='ln'>533</a></td><td>            <span class="kw">case</span> <a id="533c18" class="tk">SPI_RXFFST_FLAG</a><a id="533c33" class="tk">:</a></td></tr>
+<tr name="534" id="534">
+<td><a id="l534" class='ln'>534</a></td><td>                <a id="534c17" class="tk">ret</a> = (<a id="534c24" class="tk">*</a>((<a id="534c27" class="tk">SPI_obj</a>-&gt;<a id="534c36" class="tk">spi_base_address</a>) <a id="534c54" class="tk">+</a> <a id="534c56" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="534c76" class="tk">&gt;&gt;</a> <a id="534c79" class="tk">SPIFFRX_RXFFST_SHIFT</a>) <a id="534c101" class="tk">&amp;</a> <a id="534c103" class="tk">SPIFFRX_RXFFST_BITS</a>;</td></tr>
+<tr name="535" id="535">
+<td><a id="l535" class='ln'>535</a></td><td>                <span class="kw">break</span>;</td></tr>
+<tr name="536" id="536">
+<td><a id="l536" class='ln'>536</a></td><td>            <span class="kw">case</span> <a id="536c18" class="tk">SPI_RXFFOVF_FLAG</a><a id="536c34" class="tk">:</a></td></tr>
+<tr name="537" id="537">
+<td><a id="l537" class='ln'>537</a></td><td>                <a id="537c17" class="tk">ret</a> = (<a id="537c24" class="tk">*</a>((<a id="537c27" class="tk">SPI_obj</a>-&gt;<a id="537c36" class="tk">spi_base_address</a>) <a id="537c54" class="tk">+</a> <a id="537c56" class="tk">SPIFFRX_REG_OFFSET</a>) <a id="537c76" class="tk">&gt;&gt;</a> <a id="537c79" class="tk">SPIFFRX_RXFFOVF_SHIFT</a>) <a id="537c102" class="tk">&amp;</a> <a id="537c104" class="tk">SPIFFRX_RXFFOVF_BITS</a>;</td></tr>
+<tr name="538" id="538">
+<td><a id="l538" class='ln'>538</a></td><td>                <span class="kw">break</span>;</td></tr>
+<tr name="539" id="539">
+<td><a id="l539" class='ln'>539</a></td><td>            <span class="kw">default</span> <a id="539c21" class="tk">:</a></td></tr>
+<tr name="540" id="540">
+<td><a id="l540" class='ln'>540</a></td><td>                <a id="540c17" class="tk">ret</a> = 0;</td></tr>
+<tr name="541" id="541">
+<td><a id="l541" class='ln'>541</a></td><td>        <span class="br">}</span></td></tr>
+<tr name="542" id="542">
+<td><a id="l542" class='ln'>542</a></td><td>    <span class="br">}</span></td></tr>
+<tr name="543" id="543">
+<td><a id="l543" class='ln'>543</a></td><td>    <span class="kw">return</span> <a id="543c12" class="tk">ret</a>;</td></tr>
+<tr name="544" id="544">
+<td><a id="l544" class='ln'>544</a></td><td><span class="br">}</span></td></tr>
+<tr name="545" id="545">
+<td><a id="l545" class='ln'>545</a></td><td></td></tr>
+</table>
+</pre>
+</body>
+</html>
